@@ -1,6 +1,6 @@
 package Model;
 /**
- * Cette classe crée un joueur.
+ * Cette classe initialise un joueur.
  */
 
 public class Joueur{
@@ -9,7 +9,10 @@ public class Joueur{
     private int couleur;
     private int nombreUnite;
     
-    //Constructeur(s)
+    /**
+     * 
+     * 
+     */
     public Joueur() {
     }
 
@@ -48,8 +51,10 @@ public class Joueur{
 
     //Methodes
 
+    /**
+     * 
+     * 
+     */
 
-    
-    
 
 }
