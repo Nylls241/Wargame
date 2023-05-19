@@ -1,6 +1,6 @@
 package Model;
 /**
- * Cette classe initialise un joueur.
+ * Cette classe initialise un joueur. 
  */
 
 public class Joueur{
@@ -51,10 +51,11 @@ public class Joueur{
 
     //Methodes
 
-    /**
-     * 
-     * 
-     */
+    public void ajouterUnites(){
 
+    }
 
+    public void calculerScores(){
+
+    }
 }
