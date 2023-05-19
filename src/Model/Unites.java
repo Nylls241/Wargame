@@ -1,5 +1,10 @@
 package Model;
 
+
+/**
+ * La classe Unites fournit ...
+ * 
+ */
 public abstract class Unites {
     protected int pointAttaque;
     protected int pointDefense;
@@ -9,7 +14,10 @@ public abstract class Unites {
     protected int pointVieInitial;
     protected int pointVieFinal;
 
-    //Constructeur(s)
+    /**
+     * 
+     * 
+     */
     public Unites() {
     }
     
@@ -67,23 +75,33 @@ public abstract class Unites {
     public void setPointVieFinal(int pointVieFinal) {
         this.pointVieFinal = pointVieFinal;
     }
+    //Les Méthodes
 
-    //Methodes
+    /**
+     * 
+     * 
+     */
 
     
 
 }
 
+/**
+ * 
+ * 
+ */
 class Infanterie extends Unites{
     private String typeUnite;
 
-    // Constructeur(s)
+    /**
+     * 
+     * 
+     */
     public Infanterie() {
         typeUnite = "Infanterie";
     }
 
-    // Getters & Setters
-
+    //Getters & Setters
     public String getTypeUnite() {
         return typeUnite;
     }
@@ -94,16 +112,22 @@ class Infanterie extends Unites{
 
 }
 
+/**
+ * 
+ * 
+ */
 class InfanterieLourde extends Unites{
     private String typeUnite;
 
-     // Constructeur(s)
+     /**
+      *
+      * 
+      */
      public InfanterieLourde() {
         typeUnite = "InfanterieLourde";
     }
 
     // Getters & Setters
-
     public String getTypeUnite() {
         return typeUnite;
     }
@@ -113,16 +137,22 @@ class InfanterieLourde extends Unites{
     }
 }
 
+/**
+ * 
+ * 
+ */
 class Mage extends Unites{
     private String typeUnite;
 
-     // Constructeur(s)
+     /**
+      * 
+      *
+      */
      public Mage() {
         typeUnite = "Mage";
     }
 
     // Getters & Setters
-
     public String getTypeUnite() {
         return typeUnite;
     }
@@ -132,16 +162,22 @@ class Mage extends Unites{
     }
 }
 
+/**
+ * 
+ * 
+ */
 class Cavalerie extends Unites{
     private String typeUnite;
 
-     // Constructeur(s)
+     /**
+      * 
+      *
+      */
      public Cavalerie() {
         typeUnite = "Cavalerie";
     }
 
     // Getters & Setters
-
     public String getTypeUnite() {
         return typeUnite;
     }
