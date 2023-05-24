@@ -1,4 +1,4 @@
-package Vue;
+package Model ;
 
 public abstract class Terrain{
     protected int pointDeplacement;
