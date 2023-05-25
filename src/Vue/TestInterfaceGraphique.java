@@ -7,8 +7,11 @@ public class TestInterfaceGraphique {
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            InterfacePlateau interfacePlateau = new InterfacePlateau();
-            interfacePlateau.setVisible(true);
+            MainMenu menu = new MainMenu();
+            menu.setVisible(true);
+            //InterfacePlateau interfacePlateau = new InterfacePlateau();
+            //interfacePlateau.setVisible(true);
         });
+
     }
 }
