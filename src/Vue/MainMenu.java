@@ -1,0 +1,170 @@
+package Vue;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * Classe représentant le menu principal du jeu.
+ */
+public class MainMenu extends JFrame {
+
+    /**
+     * Constructeur du menu principal.
+     */
+    public MainMenu() {
+        setTitle("Menu Principal");
+
+        // Calcul de la taille de la fenêtre
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = screenSize.width / 4;
+        int height = screenSize.height / 4;
+        setSize(width, height);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Création des boutons
+        JButton nouvellePartieButton = new JButton("Nouvelle partie");
+        JButton chargerSauvegardeButton = new JButton("Charger sauvegarde");
+        JButton quitterButton = new JButton("Quitter");
+
+        // Ajout des écouteurs d'événements pour les boutons
+        nouvellePartieButton.addActionListener(new NouvellePartieListener());
+        quitterButton.addActionListener(new QuitterListener());
+
+        // Configuration du layout
+        setLayout(new GridLayout(3, 1));
+
+        // Ajout des boutons au menu principal
+        add(nouvellePartieButton);
+        add(chargerSauvegardeButton);
+        add(quitterButton);
+    }
+
+    /**
+     * Classe interne représentant l'écouteur d'événements pour le bouton "Nouvelle partie".
+     */
+    private class NouvellePartieListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Supprimer le menu principal
+            dispose();
+
+            // Afficher le sous-menu pour demander les pseudos des joueurs
+            SousMenuPseudos sousMenuPseudos = new SousMenuPseudos();
+            sousMenuPseudos.setVisible(true);
+        }
+    }
+
+    /**
+     * Classe interne représentant l'écouteur d'événements pour le bouton "Quitter".
+     */
+    private class QuitterListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Quitter le programme
+            System.exit(0);
+        }
+    }
+
+    /**
+     * Classe représentant le sous-menu pour demander les pseudos des joueurs.
+     */
+    private class SousMenuPseudos extends JFrame {
+
+        private JTextField pseudoJoueur1Field;
+        private JTextField pseudoJoueur2Field;
+
+        /**
+         * Constructeur du sous-menu des pseudos.
+         */
+        public SousMenuPseudos() {
+            setTitle("Sous-menu des pseudos");
+
+            // Calcul de la taille de la fenêtre
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int width = screenSize.width / 4;
+            int height = screenSize.height / 4;
+            setSize(width, height);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            // Configuration du layout
+            setLayout(new GridLayout(3, 1));
+
+            // Ajout des éléments du sous-menu
+            JLabel labelJoueur1 = new JLabel("Pseudo Joueur 1:");
+            pseudoJoueur1Field = new JTextField();
+            JButton confirmerJoueur1Button = new JButton("Confirmer");
+
+            JLabel labelJoueur2 = new JLabel("Pseudo Joueur 2:");
+            pseudoJoueur2Field = new JTextField();
+            JButton confirmerJoueur2Button = new JButton("Confirmer");
+
+            // Ajout des écouteurs d'événements pour les boutons
+            confirmerJoueur1Button.addActionListener(new ConfirmerJoueur1Listener());
+            confirmerJoueur2Button.addActionListener(new ConfirmerJoueur2Listener());
+
+            // Ajout des éléments au sous-menu
+            add(labelJoueur1);
+            add(pseudoJoueur1Field);
+            add(confirmerJoueur1Button);
+            add(labelJoueur2);
+            add(pseudoJoueur2Field);
+            add(confirmerJoueur2Button);
+        }
+
+        /**
+         * Classe interne représentant l'écouteur d'événements pour le bouton "Confirmer" du joueur 1.
+         */
+        private class ConfirmerJoueur1Listener implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String pseudoJoueur1 = pseudoJoueur1Field.getText();
+
+                // Demande de confirmation
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 1 : " + pseudoJoueur1);
+
+                if (confirmation == JOptionPane.YES_OPTION) {
+                    // Enregistrement du pseudo du joueur 1
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 1 enregistré : " + pseudoJoueur1);
+                    pseudoJoueur1Field.setEditable(false); // Empêche la modification du pseudo
+
+                    // Activation de la saisie pour le joueur 2
+                    pseudoJoueur2Field.setEditable(true);
+                }
+            }
+        }
+
+        /**
+         * Classe interne représentant l'écouteur d'événements pour le bouton "Confirmer" du joueur 2.
+         */
+        private class ConfirmerJoueur2Listener implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String pseudoJoueur2 = pseudoJoueur2Field.getText();
+
+                // Demande de confirmation
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 2 : " + pseudoJoueur2);
+
+                if (confirmation == JOptionPane.YES_OPTION) {
+                    // Enregistrement du pseudo du joueur 2
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 2 enregistré : " + pseudoJoueur2);
+
+                    // Affichage des pseudos sur le terminal
+                    System.out.println("Pseudo Joueur 1 : " + pseudoJoueur1Field.getText());
+                    System.out.println("Pseudo Joueur 2 : " + pseudoJoueur2Field.getText());
+
+                    // Fermeture de la fenêtre
+                    dispose();
+                }
+            }
+        }
+    }
+
+    }
