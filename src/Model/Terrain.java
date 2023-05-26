@@ -1,9 +1,9 @@
-package Vue;
+package Model ;
 
 public abstract class Terrain{
     protected int pointDeplacement;
     protected int bonusDefense;
-
+    protected int typeTerrain;
 
 }
 
