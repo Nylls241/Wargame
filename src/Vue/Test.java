@@ -14,8 +14,8 @@ public class Test{
          * Affiche la fenêtre du plateau
          * 
          */
-        InterfacePlateau interfacePlateau = new InterfacePlateau();
-        interfacePlateau.setVisible(true);
+        //InterfacePlateau interfacePlateau = new InterfacePlateau();
+        //interfacePlateau.setVisible(true);
         
         /**
          * 
