@@ -6,9 +6,11 @@ package Model;
  *En résumé, c'est une case de plateau.  
  */
 public class Hexagone {
-    Terrain terrain;
-    Unites unite;
-    boolean visible;
+    private Terrain terrain;
+    private Unites unite;
+    private boolean visible;
+    private int coordonnesX;
+    private int coordonneeY;
 
     /**
      * Constructeur de la classe Hexagone 
@@ -43,6 +45,15 @@ public class Hexagone {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    public int getCoordonnesX() {
+        return coordonnesX;
+    }
+
+    public int getCoordonneeY() {
+        return coordonneeY;
+    }
+    
     
     
 }
