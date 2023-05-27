@@ -1,4 +1,8 @@
 package Model;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Cette classe initialise un joueur. 
  */
@@ -7,7 +11,7 @@ public class Joueur{
     private String pseudo;
     private int numero;//Notre identiant de joueur 
     private int couleur;
-    private int nombreUnite;
+    private ArrayList<Unites> unites = new ArrayList<Unites>();
     
     /**
      * 
@@ -16,11 +20,10 @@ public class Joueur{
     public Joueur() {
     }
 
-    public Joueur(String pseudo, int numero, int couleur, int nombreUnite) {
+    public Joueur(String pseudo, int numero, int couleur) {
         this.pseudo = pseudo;
         this.numero = numero;
         this.couleur = couleur;
-        this.nombreUnite = nombreUnite;
     }
 
     //Getters & Setters
@@ -42,20 +45,31 @@ public class Joueur{
     public void setCouleur(int couleur) {
         this.couleur = couleur;
     }
-    public int getNombreUnite() {
-        return nombreUnite;
+    public ArrayList<Unites> getUnites(){
+        return unites;
     }
-    public void setNombreUnite(int nombreUnite) {
-        this.nombreUnite = nombreUnite;
+    public void setUnites(ArrayList<Unites> unites){
+        this.unites = unites;
     }
 
     //Methodes
 
-    public void ajouterUnites(){
-
+    public void ajouterUnites(Unites unite){
+        ArrayList<Unites> lu = this.getUnites();
+        lu.add(unite);
+        this.setUnites(lu);
     }
 
-    public void calculerScores(){
-
+    public void passerTour(){ //est appelée lorsque le plateau fait JoueurSuivant()
+        //cet fonction sert a préparer les unités du joueur à jouer au tourd d'après
+        for (Unites u : this.getUnites()){
+            if (u.getAction() == true && u.getPointVieMax() != u.getPointVieActuel()){
+                int pvmax = u.getPointVieMax();
+                int soin = (int) u.getPointVieActuel()+(pvmax/10);
+                u.setPointVieActuel(Math.min(pvmax,soin)); //il ne faut pas dépasser la vie maximale
+            }
+            u.setAction(true);
+            u.setPointDeplacementRestant(u.getPointDeplacementMax());
+        }
     }
 }

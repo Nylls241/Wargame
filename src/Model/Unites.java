@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * La classe Unites fournit ...
  * 
@@ -12,7 +15,7 @@ public abstract class Unites {
     protected int vision;
     protected int pointVieMax;
     protected int pointVieActuel;
-    protected boolean action; //permet de savoir si l'unité à déjà joué à ce tour
+    protected boolean action; //permet de savoir si l'unité à déjà joué à ce tour true = peut jouer false = a déjà joué
     protected Joueur proprietaire;
     protected int typeUnite;
     protected int portee; //portée des attaques de l'unité
@@ -110,16 +113,64 @@ public abstract class Unites {
 
     public void attaquer(Unites cible){//on considère que x0;y0 est en haut à gauche de la carte.
         int dist = this.getEmplacement().distance(cible.getEmplacement());
-        if (dist <= this.getPortee()){ //la portée était toujours inréfieur à la vision pas besoin de vérifier si la case est visible
+        if (dist <= this.getPortee() && this.getProprietaire() != cible.getProprietaire()){ //la portée était toujours inréfieur à la vision pas besoin de vérifier si la case est visible
             int defBonus = (int) cible.getPointDefense() * cible.getEmplacement().getTerrain().getBonusDef()/100;
             int dommages = this.getPointAttaque() - cible.getPointDefense() - defBonus;
             if (dommages <= 0){
                 dommages = 1;
             }
             int pv = cible.getPointVieActuel();
-            cible.setPointVieActuel(pv-dommages);
+            if (pv > dommages){ // la cible survi au coup reçu
+                cible.setPointVieActuel(pv-dommages); //met à jour sa vie
+            }
+            else{ //si elle ne survi pas au coup reçu
+                cible.setPointVieActuel(0);
+                cible.getEmplacement().setUnite(null);
+                Joueur j = cible.getProprietaire();
+                ArrayList<Unites> l = j.getUnites(); //todo
+                l.remove(cible);
+                j.setUnites(l);
+            }
+            
         }
 
+    }
+
+    public void deplacer(Hexagone cible){ // a faire
+        int xCible = cible.getCoordonneeX(); //colonne
+        int yCible = cible.getCoordonneeY(); //ligne
+        while (xCible != this.getEmplacement().getCoordonneeX() || yCible != this.getEmplacement().getCoordonneeY()){
+            if(xCible < this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                xCible++;
+                yCible++;
+            }
+            else if(xCible < this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                xCible++;
+            }
+            else if (xCible == this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                yCible--;
+            }
+            else if (xCible > this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                xCible--;
+            }
+            else if(xCible > this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                xCible--;
+                yCible++;
+            }
+            else if(xCible == this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                yCible++;
+            }
+            else if(xCible < this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                xCible++;
+                yCible--;
+                //car par exemple x0y4 et x1y3 ne sont pas voisin
+            }
+            else if(xCible > this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                xCible--;
+                yCible--;
+                //car par exemple x2y4 et x1y3 ne sont pas voisin
+            }
+        }
     }
 
 }

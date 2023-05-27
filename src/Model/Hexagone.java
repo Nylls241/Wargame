@@ -92,7 +92,6 @@ public class Hexagone {
                 dist++; //car par exemple x2y4 et x1y3 ne sont pas voisin
             }
             dist++;
-            System.out.println(dist);
         }
         
         return dist;
