@@ -109,15 +109,21 @@ public abstract class Unites {
     //Les Méthodes
 
     public void attaquer(Unites cible){//on considère que x0;y0 est en haut à gauche de la carte.
-        int xCible = cible.getEmplacement().getCoordonneeX();
-        int yCible = cible.getEmplacement().getCoordonneeY();
-        int xOrigine = this.getEmplacement().getCoordonneeX();
-        int yOrigine = this.getEmplacement().getCoordonneeY();
-        int difx = Math.abs(xCible-xOrigine);
-        int dify = Math.abs(yCible-yOrigine);
-        
+        int dist = this.getEmplacement().distance(cible.getEmplacement());
+        if (dist <= this.getPortee()){ //la portée était toujours inréfieur à la vision pas besoin de vérifier si la case est visible
+            int defBonus = (int) cible.getPointDefense() * cible.getEmplacement().getTerrain().getBonusDef()/100;
+            int dommages = this.getPointAttaque() - cible.getPointDefense() - defBonus;
+            if (dommages <= 0){
+                dommages = 1;
+            }
+            int pv = cible.getPointVieActuel();
+            cible.setPointVieActuel(pv-dommages);
+        }
+
     }
+
 }
+
 
 /**
  * 
@@ -130,7 +136,7 @@ class Infanterie extends Unites{
      * 
      */
     public Infanterie(Joueur proprietaire,  Hexagone emplacement) {
-        super(5, 3, 6, 4, 28, proprietaire, 1, 1, emplacement);
+        super(5, 3, 6, 4, 30, proprietaire, 1, 1, emplacement);
     }
 
 }
@@ -147,7 +153,7 @@ class InfanterieLourde extends Unites{
       * 
       */
      public InfanterieLourde(Joueur proprietaire,  Hexagone emplacement) {
-        super(10, 10, 4, 4, 38, proprietaire, 2, 1, emplacement);
+        super(10, 10, 4, 4, 40, proprietaire, 2, 1, emplacement);
     }
 
 
@@ -165,7 +171,7 @@ class Mage extends Unites{
       *
       */
      public Mage(Joueur proprietaire,  Hexagone emplacement) {
-        super(10, 1, 5, 5, 24, proprietaire, 3, 2, emplacement);
+        super(10, 1, 5, 5, 25, proprietaire, 3, 2, emplacement);
     }
 
 
@@ -183,7 +189,7 @@ class Cavalerie extends Unites{
       *
       */
     public Cavalerie(Joueur proprietaire,  Hexagone emplacement) {
-        super(8, 3, 8, 6, 38, proprietaire, 4, 1, emplacement);
+        super(8, 3, 8, 6, 40, proprietaire, 4, 1, emplacement);
     }
 
 
@@ -200,6 +206,6 @@ class Archer extends Unites{
       *
       */
     public Archer(Joueur proprietaire,  Hexagone emplacement) {
-        super(6, 2, 5, 7, 33, proprietaire, 5, 3, emplacement);
+        super(6, 2, 5, 7, 35, proprietaire, 5, 3, emplacement);
     }
 }
