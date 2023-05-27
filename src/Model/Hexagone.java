@@ -9,7 +9,7 @@ public class Hexagone {
     private Terrain terrain;
     private Unites unite;
     private boolean visible;
-    private int coordonnesX;
+    private int coordonneeX;
     private int coordonneeY;
 
     /**
@@ -21,10 +21,12 @@ public class Hexagone {
     public Hexagone() {
     }
     
-    public Hexagone(Unites unite, Terrain terrain, boolean visible) {
+    public Hexagone(Unites unite, Terrain terrain, boolean visible, int coordonneeX, int coordonneeY) {
         this.unite = null;
         this.terrain = terrain;
         this.visible = false;
+        this.coordonneeX = coordonneeX;
+        this.coordonneeY = coordonneeY;
     }
 
     //Getters & Setters
@@ -34,7 +36,7 @@ public class Hexagone {
     public void setUnite(Unites unite) {
         this.unite = unite;
     }
-    public Terrain getTerrai(){
+    public Terrain getTerrain(){
         return  terrain;
     }
 
@@ -46,8 +48,8 @@ public class Hexagone {
         this.visible = visible;
     }
 
-    public int getCoordonnesX() {
-        return coordonnesX;
+    public int getCoordonneeX() {
+        return coordonneeX;
     }
 
     public int getCoordonneeY() {

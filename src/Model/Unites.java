@@ -1,6 +1,5 @@
 package Model;
 
-
 /**
  * La classe Unites fournit ...
  * 
@@ -11,8 +10,14 @@ public abstract class Unites {
     protected int pointDeplacementMax;
     protected int pointDeplacementRestant;
     protected int vision;
-    protected int pointVieInitial;
-    protected int pointVieFinal;
+    protected int pointVieMax;
+    protected int pointVieActuel;
+    protected boolean action; //permet de savoir si l'unité à déjà joué à ce tour
+    protected Joueur proprietaire;
+    protected int typeUnite;
+    protected int portee; //portée des attaques de l'unité
+    protected Hexagone emplacement; //localisation de l'unité.
+
 
     /**
      * 
@@ -21,15 +26,21 @@ public abstract class Unites {
     public Unites() {
     }
     
-    public Unites(int pointAttaque, int pointDefense, int pointDeplacementMax, int pointDeplacementRestant, int vision,
-            int pointVieInitial, int pointVieFinal) {
+    public Unites(int pointAttaque, int pointDefense, int pointDeplacementMax, int vision,
+            int pointVieMax, Joueur proprietaire, int typeUnite, int portee, Hexagone emplacement) {
         this.pointAttaque = pointAttaque;
         this.pointDefense = pointDefense;
         this.pointDeplacementMax = pointDeplacementMax;
-        this.pointDeplacementRestant = pointDeplacementRestant;
+        this.pointDeplacementRestant = pointDeplacementMax; //lorsqu'une unité est créée, on considère qu'elle peut se déplacer normalement
         this.vision = vision;
-        this.pointVieInitial = pointVieInitial;
-        this.pointVieFinal = pointVieFinal;
+        this.pointVieMax = pointVieMax;
+        this.pointVieActuel = pointVieMax; //lorsqu'une unité est créée, on considère qu'elle n'est pas blessée
+        this.action = true; //lorsqu'une unité est créée, on considère qu'elle peut jouer au tour actuel
+        this.proprietaire = proprietaire;
+        this.typeUnite = typeUnite;
+        this.portee = portee;
+        this.emplacement = emplacement;
+        this.emplacement.setUnite(this);
     }
 
     //Getters & Setters
@@ -63,23 +74,39 @@ public abstract class Unites {
     public void setVision(int vision) {
         this.vision = vision;
     }
-    public int getPointVieInitial() {
-        return pointVieInitial;
+    public int getPointVieMax() {
+        return pointVieMax;
     }
-    public void setPointVieInitial(int pointVieInitial) {
-        this.pointVieInitial = pointVieInitial;
+    public int getPointVieActuel() {
+        return pointVieActuel;
     }
-    public int getPointVieFinal() {
-        return pointVieFinal;
+    public void setPointVieActuel(int pointVieActuel) {
+        this.pointVieActuel = pointVieActuel;
     }
-    public void setPointVieFinal(int pointVieFinal) {
-        this.pointVieFinal = pointVieFinal;
+    public boolean getAction(){
+        return action;
+    }
+    public void setAction(boolean action){
+        this.action = action;
+    }
+    public Joueur getProprietaire(){
+        return proprietaire;
+    }
+    public int getTypeUnite(){
+        return typeUnite;
+    }
+    public int getPortee(){
+        return portee;
+    }
+    public Hexagone getEmplacement(){
+        return emplacement;
+    }
+    public void setEmplacement(Hexagone newEmplacement){ //ça marche
+        this.emplacement.setUnite(null);//retire l'unité de l'ancien emplacement
+        this.emplacement = newEmplacement; //changer l'emplacement de l'unité
+        this.emplacement.setUnite(this); //appliquer le changement
     }
     //Les Méthodes
-
-
-    
-
 }
 
 /**
@@ -87,23 +114,13 @@ public abstract class Unites {
  * 
  */
 class Infanterie extends Unites{
-    private String typeUnite;
 
     /**
      * 
      * 
      */
-    public Infanterie() {
-        typeUnite = "Infanterie";
-    }
-
-    //Getters & Setters
-    public String getTypeUnite() {
-        return typeUnite;
-    }
-
-    public void setTypeUnite(String typeUnite) {
-        this.typeUnite = typeUnite;
+    public Infanterie(Joueur proprietaire,  Hexagone emplacement) {
+        super(1, 1, 1, 1, 1, proprietaire, 1, 1, emplacement);
     }
 
 }
@@ -113,24 +130,17 @@ class Infanterie extends Unites{
  * 
  */
 class InfanterieLourde extends Unites{
-    private String typeUnite;
+
 
      /**
       *
       * 
       */
      public InfanterieLourde() {
-        typeUnite = "InfanterieLourde";
+
     }
 
-    // Getters & Setters
-    public String getTypeUnite() {
-        return typeUnite;
-    }
 
-    public void setTypeUnite(String typeUnite) {
-        this.typeUnite = typeUnite;
-    }
 }
 
 /**
@@ -138,24 +148,17 @@ class InfanterieLourde extends Unites{
  * 
  */
 class Mage extends Unites{
-    private String typeUnite;
+
 
      /**
       * 
       *
       */
      public Mage() {
-        typeUnite = "Mage";
+
     }
 
-    // Getters & Setters
-    public String getTypeUnite() {
-        return typeUnite;
-    }
 
-    public void setTypeUnite(String typeUnite) {
-        this.typeUnite = typeUnite;
-    }
 }
 
 /**
@@ -163,22 +166,15 @@ class Mage extends Unites{
  * 
  */
 class Cavalerie extends Unites{
-    private String typeUnite;
+
 
      /**
       * 
       *
       */
      public Cavalerie() {
-        typeUnite = "Cavalerie";
+
     }
 
-    // Getters & Setters
-    public String getTypeUnite() {
-        return typeUnite;
-    }
 
-    public void setTypeUnite(String typeUnite) {
-        this.typeUnite = typeUnite;
-    }
 }

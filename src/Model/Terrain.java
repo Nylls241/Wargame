@@ -48,7 +48,7 @@ public abstract class Terrain {
     public boolean isOccupable() {
         return occupable;
     }
-    
+}
 class Forêt extends Terrain {
 
         public Forêt() 
@@ -136,7 +136,8 @@ class Montagne extends Terrain {
 
 
 }
-}
+
+
 
 
 
