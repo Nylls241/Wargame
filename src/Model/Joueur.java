@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Cette classe initialise un joueur. 

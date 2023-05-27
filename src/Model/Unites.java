@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * La classe Unites fournit ...
@@ -127,7 +126,7 @@ public abstract class Unites {
                 cible.setPointVieActuel(0);
                 cible.getEmplacement().setUnite(null);
                 Joueur j = cible.getProprietaire();
-                ArrayList<Unites> l = j.getUnites(); //todo
+                ArrayList<Unites> l = j.getUnites(); 
                 l.remove(cible);
                 j.setUnites(l);
             }

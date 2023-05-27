@@ -5,7 +5,39 @@ import java.util.ArrayList;
 public class plateau {
     private ArrayList<ArrayList<Hexagone>> cases = new ArrayList<ArrayList<Hexagone>>(); 
     private int tourActuel;//Notre identiant de joueur 
-    private ArrayList<Joueur> Joueurs = new ArrayList<Joueur>();
+    private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
 
-    public plateau(){};
+    public plateau(){
+
+    }
+
+    public plateau(ArrayList<ArrayList<Hexagone>> cases, ArrayList<Joueur> joueurs){
+        this.cases = cases;
+        this.joueurs = joueurs;
+        tourActuel = 0; //id du 1er joueur
+    }
+
+    public ArrayList<Joueur>getJoueurs(){
+        return this.joueurs;
+    }
+
+    public void setJoueurs(ArrayList<Joueur> joueurs){
+        this.joueurs = joueurs;
+    }
+
+    public int getTourActuel(){
+        return this.tourActuel;
+    }
+
+    public void setTourActuel(int tourActuel){
+        this.tourActuel = tourActuel;
+    }
+
+    public ArrayList<ArrayList<Hexagone>> getCases(){
+        return this.cases;
+    }
+
+    public void setCases(ArrayList<ArrayList<Hexagone>> cases){
+        this.cases = cases;
+    }
 }
