@@ -14,15 +14,16 @@ public class Test{
          * Affiche la fenêtre du plateau
          * 
          */
-        //InterfacePlateau interfacePlateau = new InterfacePlateau();
-        //interfacePlateau.setVisible(true);
+        InterfacePlateau interfacePlateau = new InterfacePlateau();
+        interfacePlateau.setVisible(true);
+
         
         /**
          * 
          * Affiche le menu principal 
          */
        //MainMenu mainMenu = new MainMenu();
-      // mainMenu.setVisible(true);
+       //mainMenu.setVisible(true);
     }
 
 }

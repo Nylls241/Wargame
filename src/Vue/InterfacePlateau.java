@@ -12,35 +12,33 @@ import javax.imageio.ImageIO;
  */
 public class InterfacePlateau extends JFrame {
 
-    private JPanel panelPlateau; // Panel pour le plateau de jeu
+    JFrame frame;
+    JLabel displayField;
+    ImageIcon image;
 
     /**
      * Constructeur de la classe InterfacePlateau.
      */
     public InterfacePlateau() {
         // Configuration de la fenêtre
-        setTitle("Plateau de jeu : WarGame");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("Plateau de jeu : WarGame");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        // Création du panel pour le plateau de jeu
-        panelPlateau = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                // Dessinez la texture du plateau en utilisant une image
-                try {
-                    BufferedImage plateauImg = ImageIO.read(new File("plateau.png"));
-                    g.drawImage(plateauImg, 0, 0, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        panelPlateau.setPreferredSize(new Dimension(1280, 720)); // Définissez la taille souhaitée du plateau
-        add(panelPlateau);
+        // Dessinez la texture du plateau en utilisant une image
+            
+        try {
+            image = new ImageIcon(getClass().getResource("../textures/plateau.png"));
+            displayField = new JLabel(image);
+            frame.add(displayField);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            System.out.println("image non trouvé");
+        }
+            
+            frame.pack();
+            frame.setVisible(true);
 
-        pack(); // Ajuster la taille de la fenêtre aux dimensions des composants
     }
     
    
