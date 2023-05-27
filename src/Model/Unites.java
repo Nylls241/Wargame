@@ -107,6 +107,16 @@ public abstract class Unites {
         this.emplacement.setUnite(this); //appliquer le changement
     }
     //Les Méthodes
+
+    public void attaquer(Unites cible){//on considère que x0;y0 est en haut à gauche de la carte.
+        int xCible = cible.getEmplacement().getCoordonneeX();
+        int yCible = cible.getEmplacement().getCoordonneeY();
+        int xOrigine = this.getEmplacement().getCoordonneeX();
+        int yOrigine = this.getEmplacement().getCoordonneeY();
+        int difx = Math.abs(xCible-xOrigine);
+        int dify = Math.abs(yCible-yOrigine);
+        
+    }
 }
 
 /**

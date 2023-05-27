@@ -9,8 +9,8 @@ public class Hexagone {
     private Terrain terrain;
     private Unites unite;
     private boolean visible;
-    private int coordonneeX;
-    private int coordonneeY;
+    private int coordonneeX; //colonnes
+    private int coordonneeY; //lignes
 
     /**
      * Constructeur de la classe Hexagone 
@@ -54,6 +54,48 @@ public class Hexagone {
 
     public int getCoordonneeY() {
         return coordonneeY;
+    }
+
+    public int distance(Hexagone cible){
+        int dist = 0;
+        int xCible = cible.getCoordonneeX(); //colonne
+        int yCible = cible.getCoordonneeY(); //ligne
+        while (xCible != this.getCoordonneeX() || yCible != this.getCoordonneeY()){
+            if(xCible < this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                xCible++;
+                yCible++;
+            }
+            else if(xCible < this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                xCible++;
+            }
+            else if (xCible == this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                yCible--;
+            }
+            else if (xCible > this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                xCible--;
+            }
+            else if(xCible > this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                xCible--;
+                yCible++;
+            }
+            else if(xCible == this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                yCible++;
+            }
+            else if(xCible < this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                xCible++;
+                yCible--;
+                dist++; //car par exemple x0y4 et x1y3 ne sont pas voisin
+            }
+            else if(xCible > this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                xCible--;
+                yCible--;
+                dist++; //car par exemple x2y4 et x1y3 ne sont pas voisin
+            }
+            dist++;
+            System.out.println(dist);
+        }
+        
+        return dist;
     }
     
     
