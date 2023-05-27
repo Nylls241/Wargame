@@ -120,7 +120,7 @@ class Infanterie extends Unites{
      * 
      */
     public Infanterie(Joueur proprietaire,  Hexagone emplacement) {
-        super(1, 1, 1, 1, 1, proprietaire, 1, 1, emplacement);
+        super(5, 3, 6, 4, 28, proprietaire, 1, 1, emplacement);
     }
 
 }
@@ -136,8 +136,8 @@ class InfanterieLourde extends Unites{
       *
       * 
       */
-     public InfanterieLourde() {
-
+     public InfanterieLourde(Joueur proprietaire,  Hexagone emplacement) {
+        super(10, 10, 4, 4, 38, proprietaire, 2, 1, emplacement);
     }
 
 
@@ -154,8 +154,8 @@ class Mage extends Unites{
       * 
       *
       */
-     public Mage() {
-
+     public Mage(Joueur proprietaire,  Hexagone emplacement) {
+        super(10, 1, 5, 5, 24, proprietaire, 3, 2, emplacement);
     }
 
 
@@ -172,9 +172,24 @@ class Cavalerie extends Unites{
       * 
       *
       */
-     public Cavalerie() {
-
+    public Cavalerie(Joueur proprietaire,  Hexagone emplacement) {
+        super(8, 3, 8, 6, 38, proprietaire, 4, 1, emplacement);
     }
 
 
+}
+
+/**
+ * 
+ * 
+ */
+class Archer extends Unites{
+
+    /**
+      * 
+      *
+      */
+    public Archer(Joueur proprietaire,  Hexagone emplacement) {
+        super(6, 2, 5, 7, 33, proprietaire, 5, 3, emplacement);
+    }
 }
