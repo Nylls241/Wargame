@@ -144,7 +144,10 @@ public abstract class Unites {
 
 
         while (continuer_deplacement == true){
-            if (this.getEmplacement().getCoordonneeX()%2 ==0){
+            if (xCible == this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                continuer_deplacement = false;
+            }
+            else if (this.getEmplacement().getCoordonneeX()%2 ==0){
                 if(xCible < this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
                     xSuivant--;
                     ySuivant--;
@@ -220,8 +223,10 @@ public abstract class Unites {
         for (ArrayList<Hexagone> colonne : this.proprietaire.getPlateau().getCases()){ //contrôle la visibilité des cases
             for (Hexagone ligne : colonne){
                 ligne.setVisible(false);
-                if (ligne.distance(this.getEmplacement()) <= this.getVision()){
-                    ligne.setVisible(true);
+                for (Unites u : this.getProprietaire().getUnites()){
+                    if (ligne.distance(u.getEmplacement()) <= u.getVision()){
+                        ligne.setVisible(true);
+                    }
                 }
                 
             }
