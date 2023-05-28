@@ -47,4 +47,26 @@ public class Plateau {
     public Hexagone getCaseXY(int x, int y){
         return this.cases.get(x).get(y);
     }
+
+    //Méthodes
+    public void JoueurSuivant(){
+        if (this.getTourActuel() == 0){
+            this.setTourActuel(1);
+        }
+        else{
+            this.setTourActuel(0);
+        }
+        for (ArrayList<Hexagone> colonne : getCases()){ //contrôle la visibilité des cases
+            for (Hexagone ligne : colonne){
+                ligne.setVisible(false);
+                for (Unites u : this.getJoueurs().get(this.getTourActuel()).getUnites()){
+                    if (ligne.distance(u.getEmplacement()) <= u.getVision()){
+                        ligne.setVisible(true);
+                    }
+                }
+                
+            }
+        }
+    }
+
 }

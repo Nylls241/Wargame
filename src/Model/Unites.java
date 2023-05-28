@@ -213,6 +213,19 @@ public abstract class Unites {
                 continuer_deplacement = false;
             }
         }
+        this.checkVisibilité();
+    }
+
+    public void checkVisibilité(){
+        for (ArrayList<Hexagone> colonne : this.proprietaire.getPlateau().getCases()){ //contrôle la visibilité des cases
+            for (Hexagone ligne : colonne){
+                ligne.setVisible(false);
+                if (ligne.distance(this.getEmplacement()) <= this.getVision()){
+                    ligne.setVisible(true);
+                }
+                
+            }
+        }
     }
 
 }
