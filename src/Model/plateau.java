@@ -2,19 +2,22 @@ package Model;
 
 import java.util.ArrayList;
 
-public class plateau {
+public class Plateau {
     private ArrayList<ArrayList<Hexagone>> cases = new ArrayList<ArrayList<Hexagone>>(); 
     private int tourActuel;//Notre identiant de joueur 
     private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
 
-    public plateau(){
+    public Plateau(){
 
     }
 
-    public plateau(ArrayList<ArrayList<Hexagone>> cases, ArrayList<Joueur> joueurs){
+    public Plateau(ArrayList<ArrayList<Hexagone>> cases, ArrayList<Joueur> joueurs){
         this.cases = cases;
         this.joueurs = joueurs;
         tourActuel = 0; //id du 1er joueur
+        for(Joueur j : this.joueurs){
+            j.setPlateau(this);
+        }
     }
 
     public ArrayList<Joueur>getJoueurs(){
@@ -39,5 +42,9 @@ public class plateau {
 
     public void setCases(ArrayList<ArrayList<Hexagone>> cases){
         this.cases = cases;
+    }
+
+    public Hexagone getCaseXY(int x, int y){
+        return this.cases.get(x).get(y);
     }
 }

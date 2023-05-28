@@ -60,40 +60,78 @@ public class Hexagone {
         int dist = 0;
         int xCible = cible.getCoordonneeX(); //colonne
         int yCible = cible.getCoordonneeY(); //ligne
-        while (xCible != this.getCoordonneeX() || yCible != this.getCoordonneeY()){
-            if(xCible < this.getCoordonneeX() && yCible < this.getCoordonneeY()){
-                xCible++;
-                yCible++;
+        if(this.getCoordonneeX()%2==0){ //si l'hexagone est sur une colonne paire (car selon la parité de la colonne les voisins diffèrent)
+            while (xCible != this.getCoordonneeX() || yCible != this.getCoordonneeY()){
+                if(xCible < this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    xCible++;
+                    yCible++;
+                }
+                else if(xCible < this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                    xCible++;
+                }
+                else if (xCible == this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    yCible--;
+                }
+                else if (xCible > this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                    xCible--;
+                }
+                else if(xCible > this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    xCible--;
+                    yCible++;
+                }
+                else if(xCible == this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    yCible++;
+                }
+                else if(xCible < this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    xCible++;
+                    yCible--;
+                    dist++; //car par exemple x0y4 et x1y3 ne sont pas voisin
+                }
+                else if(xCible > this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    xCible--;
+                    yCible--;
+                    dist++; //car par exemple x2y4 et x1y3 ne sont pas voisin
+                }
+                dist++;
             }
-            else if(xCible < this.getCoordonneeX() && yCible == this.getCoordonneeY()){
-                xCible++;
-            }
-            else if (xCible == this.getCoordonneeX() && yCible > this.getCoordonneeY()){
-                yCible--;
-            }
-            else if (xCible > this.getCoordonneeX() && yCible == this.getCoordonneeY()){
-                xCible--;
-            }
-            else if(xCible > this.getCoordonneeX() && yCible < this.getCoordonneeY()){
-                xCible--;
-                yCible++;
-            }
-            else if(xCible == this.getCoordonneeX() && yCible < this.getCoordonneeY()){
-                yCible++;
-            }
-            else if(xCible < this.getCoordonneeX() && yCible > this.getCoordonneeY()){
-                xCible++;
-                yCible--;
-                dist++; //car par exemple x0y4 et x1y3 ne sont pas voisin
-            }
-            else if(xCible > this.getCoordonneeX() && yCible > this.getCoordonneeY()){
-                xCible--;
-                yCible--;
-                dist++; //car par exemple x2y4 et x1y3 ne sont pas voisin
-            }
-            dist++;
         }
-        
+        else{ //si l'hexagone est sur une colonne impaire
+            while (xCible != this.getCoordonneeX() || yCible != this.getCoordonneeY()){
+                if(xCible < this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    xCible++;
+                    yCible++;
+                    dist++; //car par exemple x1y1 et x0y0 ne sont pas voisin
+                }
+                else if(xCible < this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                    xCible++;
+                }
+                else if (xCible == this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    yCible--;
+                }
+                else if (xCible > this.getCoordonneeX() && yCible == this.getCoordonneeY()){
+                    xCible--;
+                }
+                else if(xCible > this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    xCible--;
+                    yCible++;
+                    dist++; //car par exemple x1y1 et x2y0 ne sont pas voisin
+                }
+                else if(xCible == this.getCoordonneeX() && yCible < this.getCoordonneeY()){
+                    yCible++;
+                }
+                else if(xCible < this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    xCible++;
+                    yCible--;
+                    
+                }
+                else if(xCible > this.getCoordonneeX() && yCible > this.getCoordonneeY()){
+                    xCible--;
+                    yCible--;
+                    
+                }
+                dist++;
+            }
+        }
         return dist;
     }
     

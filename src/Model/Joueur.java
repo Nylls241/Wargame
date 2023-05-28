@@ -11,6 +11,7 @@ public class Joueur{
     private int numero;//Notre identiant de joueur 
     private int couleur;
     private ArrayList<Unites> unites = new ArrayList<Unites>();
+    private Plateau plateau;
     
     /**
      * 
@@ -50,6 +51,12 @@ public class Joueur{
     public void setUnites(ArrayList<Unites> unites){
         this.unites = unites;
     }
+    public Plateau getPlateau(){
+        return this.plateau;
+    }
+    public void setPlateau(Plateau plateau){
+        this.plateau = plateau;
+    }
 
     //Methodes
 
@@ -62,8 +69,8 @@ public class Joueur{
     public void passerTour(){ //est appelée lorsque le plateau fait JoueurSuivant()
         //cet fonction sert a préparer les unités du joueur à jouer au tourd d'après
         for (Unites u : this.getUnites()){
-            if (u.getAction() == true && u.getPointVieMax() != u.getPointVieActuel()){
-                int pvmax = u.getPointVieMax();
+            if (u.getAction() == true && u.getPointDeplacementMax() == u.getPointDeplacementRestant() && u.getPointVieMax() != u.getPointVieActuel()){ //si unité n'a rien fait
+                int pvmax = u.getPointVieMax(); //on soigne l'unité
                 int soin = (int) u.getPointVieActuel()+(pvmax/10);
                 u.setPointVieActuel(Math.min(pvmax,soin)); //il ne faut pas dépasser la vie maximale
             }

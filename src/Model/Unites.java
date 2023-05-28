@@ -138,36 +138,79 @@ public abstract class Unites {
     public void deplacer(Hexagone cible){ // a faire
         int xCible = cible.getCoordonneeX(); //colonne
         int yCible = cible.getCoordonneeY(); //ligne
-        while (xCible != this.getEmplacement().getCoordonneeX() || yCible != this.getEmplacement().getCoordonneeY()){
-            if(xCible < this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
-                xCible++;
-                yCible++;
+        Boolean continuer_deplacement = true;
+        int xSuivant = this.getEmplacement().getCoordonneeX(); //sert à déterminer où ira l'unité case par case
+        int ySuivant = this.getEmplacement().getCoordonneeY(); //sert à déterminer où ira l'unité case par case
+
+
+        while (continuer_deplacement == true){
+            if (this.getEmplacement().getCoordonneeX()%2 ==0){
+                if(xCible < this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    xSuivant--;
+                    ySuivant--;
+                }
+                else if(xCible < this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                    xSuivant--;
+                }
+                else if (xCible == this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    ySuivant++;
+                }
+                else if (xCible > this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                    xSuivant++;
+                }
+                else if(xCible > this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    xSuivant++;
+                    ySuivant--;
+                }
+                else if(xCible == this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    ySuivant--;
+                }
+                else if(xCible < this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    //dans ce cas, impossible de s'y rendre en 1 mouvement
+                    xSuivant--;
+                }
+                else if(xCible > this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    //dans ce cas, impossible de s'y rendre en 1 mouvement
+                    xSuivant++;
+                }
             }
-            else if(xCible < this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
-                xCible++;
+            else{
+                if(xCible < this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    //dans ce cas, impossible de s'y rendre en 1 mouvement
+                    xSuivant--;
+                }
+                else if(xCible < this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                    xSuivant--;
+                }
+                else if (xCible == this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    ySuivant++;
+                }
+                else if (xCible > this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
+                    xSuivant++;
+                }
+                else if(xCible > this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    //dans ce cas, impossible de s'y rendre en 1 mouvement
+                    xSuivant++;
+                }
+                else if(xCible == this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
+                    ySuivant--;
+                }
+                else if(xCible < this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    xSuivant--;
+                    ySuivant++;
+                }
+                else if(xCible > this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
+                    xSuivant++;
+                    ySuivant++;
+                }
             }
-            else if (xCible == this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
-                yCible--;
+            Hexagone suivant = this.getProprietaire().getPlateau().getCaseXY(xSuivant, ySuivant);
+            if(suivant.getTerrain().isOccupable() == true && this.getPointDeplacementRestant() >= suivant.getTerrain().getPointDeplacement() && suivant.getUnite() == null){
+                this.setEmplacement(suivant);
+                this.setPointDeplacementRestant(this.getPointDeplacementRestant()-suivant.getTerrain().getPointDeplacement());
             }
-            else if (xCible > this.getEmplacement().getCoordonneeX() && yCible == this.getEmplacement().getCoordonneeY()){
-                xCible--;
-            }
-            else if(xCible > this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
-                xCible--;
-                yCible++;
-            }
-            else if(xCible == this.getEmplacement().getCoordonneeX() && yCible < this.getEmplacement().getCoordonneeY()){
-                yCible++;
-            }
-            else if(xCible < this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
-                xCible++;
-                yCible--;
-                //car par exemple x0y4 et x1y3 ne sont pas voisin
-            }
-            else if(xCible > this.getEmplacement().getCoordonneeX() && yCible > this.getEmplacement().getCoordonneeY()){
-                xCible--;
-                yCible--;
-                //car par exemple x2y4 et x1y3 ne sont pas voisin
+            else{
+                continuer_deplacement = false;
             }
         }
     }
