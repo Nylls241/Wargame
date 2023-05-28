@@ -28,6 +28,19 @@ public abstract class Unites {
     public Unites() {
     }
     
+    /**
+     * Constructeur de la classe Unité
+     * normalement inutilisé
+     * @param pointAttaque influence les dommages potentiels infligés par l'unité
+     * @param pointDefense influence les dommages potentiels subis par l'unité
+     * @param pointDeplacementMax influence le déplacement maximal de l'unité 
+     * @param vision défini la portée à laquelle les cases sont visible autour de l'unité
+     * @param pointVieMax défini la quantité maximale de dommages que l'unité peut attaquer, et la régénération par tour
+     * @param propriétaire défini la faction à laquelle appartient l'unité
+     * @param typeUnite id définissant le type d'unité
+     * @param portee la portée en Hexagone des attaques de l'unité
+     * @param emplacement localisation initiale de l'unité 
+     */
     public Unites(int pointAttaque, int pointDefense, int pointDeplacementMax, int vision,
             int pointVieMax, Joueur proprietaire, int typeUnite, int portee, Hexagone emplacement) {
         this.pointAttaque = pointAttaque;
@@ -104,12 +117,24 @@ public abstract class Unites {
         return emplacement;
     }
     public void setEmplacement(Hexagone newEmplacement){ //ça marche
-        this.emplacement.setUnite(null);//retire l'unité de l'ancien emplacement
+        if (this.getEmplacement() != null){
+            this.getEmplacement().setUnite(null);//retire l'unité de l'ancien emplacement
+        }
         this.emplacement = newEmplacement; //changer l'emplacement de l'unité
-        this.emplacement.setUnite(this); //appliquer le changement
+        this.getEmplacement().setUnite(this); //appliquer le changement
     }
+
     //Les Méthodes
 
+    /**
+     * Méthode d'attaque de l'unité vers une cible
+     * Si la cible est une unité d'une faction adverse et est a portée de l'unité elle subis des dommages
+     * les dommages sont influencés par l'attaque de l'unité, la défense de sa cible et le terrain de sa cible
+     * le minimum de dommages infligés est 1
+     * Si la cible meurt elle disparait
+     * Consomme le point d'action de l'unité
+     * @param cible unité cible de l'attaque
+     */
     public void attaquer(Unites cible){//on considère que x0;y0 est en haut à gauche de la carte.
         int dist = this.getEmplacement().distance(cible.getEmplacement());
         if (dist <= this.getPortee() && this.getProprietaire() != cible.getProprietaire()){ //la portée était toujours inréfieur à la vision pas besoin de vérifier si la case est visible
@@ -130,11 +155,16 @@ public abstract class Unites {
                 l.remove(cible);
                 j.setUnites(l);
             }
-            
+            this.setAction(false);
         }
 
     }
 
+    /**
+     * Méthode permettant à l'unité de se déplacer vers une cible
+     * si l'unité tombe a court de déplacement ou tombe sur un ennemi ou une case innocupable elle s'arrête 
+     * @param cible destination finale de l'unité
+     */
     public void deplacer(Hexagone cible){ // a faire
         int xCible = cible.getCoordonneeX(); //colonne
         int yCible = cible.getCoordonneeY(); //ligne
@@ -219,6 +249,11 @@ public abstract class Unites {
         this.checkVisibilité();
     }
 
+    /**
+     * Méthode permettant de rendre visible les cases de la faction de l'unité
+     * les cases à portée de vision de l'unité sont visibles
+     * les autres sont rendues invisibles
+     */
     public void checkVisibilité(){
         for (ArrayList<Hexagone> colonne : this.proprietaire.getPlateau().getCases()){ //contrôle la visibilité des cases
             for (Hexagone ligne : colonne){
