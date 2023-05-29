@@ -19,16 +19,8 @@ public abstract class Terrain {
 
 /**
  * Constructeur de la classe Terrain 
- * On a les différents attributs nécessaires à sa création et à sa caractérisation 
- * On code les Getters et ensuite nos classes filles auxquelles on attribue les données de l'énoncé concernant les caractéristiques 
- * en sachant que typeTerrain est attribué de telle sorte à ce que cela serve d'id pour les différentes classes filles, et que le booléen
- * occupable nous sert pour différencier eau profonde des autres terrains.
+ * Inutilisé car c'est une classe abstraite
  */
-    public Terrain(int pointDeplacement, int bonusDef, int typeTerrain,boolean occupable) 
-    {
-
-    }
-
     public Terrain() {
 	}
 
@@ -48,9 +40,15 @@ public abstract class Terrain {
     public boolean isOccupable() {
         return occupable;
     }
-    
+}
 class Forêt extends Terrain {
 
+        /**
+         * Constructeur de la classe Forêt
+         * 40% de bonus de défense
+         * 2 pointDeplacement par case de forêt
+         * les forêts sont occupables.
+         */
         public Forêt() 
         {
         	super();
@@ -64,6 +62,12 @@ class Forêt extends Terrain {
     
 class Village extends Terrain {
 
+        /**
+         * Constructeur de la classe Village
+         * 40% de bonus de défense
+         * 1 pointDeplacement par case de village
+         * les villages sont occupables.
+         */
         public Village() 
         {
         	super();
@@ -76,6 +80,12 @@ class Village extends Terrain {
     }
 class Forteresse extends Terrain {
 
+        /**
+         * Constructeur de la classe Forteresse
+         * 60% de bonus de défense
+         * 1 pointDeplacement par case de forteresse
+         * les forteresses sont occupable.
+         */
         public Forteresse()
         {
         	super();
@@ -89,6 +99,12 @@ class Forteresse extends Terrain {
 
 class EauProfonde extends Terrain {
 
+        /**
+         * Constructeur de la classe Eau Prodonde
+         * 0% de bonus de défense
+         * 5000 pointDeplacement par case de forêt
+         * les cases d'eau profondes ne peuvent pas être occupées
+         */
         public EauProfonde() 
         {
         	super();
@@ -101,6 +117,12 @@ class EauProfonde extends Terrain {
     }
 class Plaine extends Terrain {
 
+        /**
+         * Constructeur de la classe Plaine
+         * 20% de bonus de défense
+         * 1 pointDeplacement par case de forêt
+         * les plaines sont occupable.
+         */
         public Plaine() 
         {
         	super();
@@ -113,6 +135,12 @@ class Plaine extends Terrain {
     }
 class Colline extends Terrain {
 
+        /**
+         * Constructeur de la classe Colline
+         * 50% de bonus de défense
+         * 2 pointDeplacement par case de forêt
+         * les collines sont occupable.
+         */
         public Colline()
         {
         	super();
@@ -125,6 +153,12 @@ class Colline extends Terrain {
     }
 class Montagne extends Terrain {
 
+        /**
+         * Constructeur de la classe Montagne
+         * 60% de bonus de défense
+         * 3 pointDeplacement par case de forêt
+         * les montagnes sont occupable.
+         */
         public Montagne()
         {
         	super();
@@ -136,7 +170,8 @@ class Montagne extends Terrain {
 
 
 }
-}
+
+
 
 
 
