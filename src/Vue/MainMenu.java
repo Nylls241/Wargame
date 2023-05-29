@@ -10,19 +10,35 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu extends JFrame {
 
+    private JPanel buttonPanel;
+    private ImageIcon texture;
+
     /**
      * Constructeur du menu principal.
      */
     public MainMenu() {
-        setTitle("Menu Principal");
+        setTitle("Wargame");
+
+        // Chargement de la texture
+        texture = new ImageIcon("../textures/debut.jpg");
 
         // Calcul de la taille de la fenêtre
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = screenSize.width / 4;
-        int height = screenSize.height / 4;
-        setSize(width, height);
+        setSize(1280, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Création du panel pour la texture
+        JPanel texturePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // Dessin de la texture
+                Image image = texture.getImage();
+                g.drawImage(image, 0, 0, 1280, 720, this);
+            }
+        };
+        texturePanel.setPreferredSize(new Dimension(1280, 720));
 
         // Création des boutons
         JButton nouvellePartieButton = new JButton("Nouvelle partie");
@@ -33,13 +49,19 @@ public class MainMenu extends JFrame {
         nouvellePartieButton.addActionListener(new NouvellePartieListener());
         quitterButton.addActionListener(new QuitterListener());
 
-        // Configuration du layout
-        setLayout(new GridLayout(3, 1));
+        // Création du panel pour les boutons
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(3, 1));
 
-        // Ajout des boutons au menu principal
-        add(nouvellePartieButton);
-        add(chargerSauvegardeButton);
-        add(quitterButton);
+        // Ajout des boutons au panel des boutons
+        buttonPanel.add(nouvellePartieButton);
+        buttonPanel.add(chargerSauvegardeButton);
+        buttonPanel.add(quitterButton);
+
+        // Configuration du layout de la fenêtre principale
+        setLayout(new BorderLayout());
+        getContentPane().add(texturePanel, BorderLayout.CENTER);
+        getContentPane().add(buttonPanel, BorderLayout.EAST);
     }
 
     /**
@@ -53,7 +75,7 @@ public class MainMenu extends JFrame {
             dispose();
 
             // Afficher le sous-menu pour demander les pseudos des joueurs
-            SousMenuPseudos sousMenuPseudos = new SousMenuPseudos();
+            SousMenuPseudos sousMenuPseudos = new SousMenuPseudos(texture);
             sousMenuPseudos.setVisible(true);
         }
     }
@@ -77,20 +99,35 @@ public class MainMenu extends JFrame {
 
         private JTextField pseudoJoueur1Field;
         private JTextField pseudoJoueur2Field;
+        private ImageIcon texture;
+        
 
         /**
          * Constructeur du sous-menu des pseudos.
          */
-        public SousMenuPseudos() {
-            setTitle("Sous-menu des pseudos");
+        public SousMenuPseudos(ImageIcon texture) {
+            setTitle("Wargame");
+            this.texture = texture;
 
             // Calcul de la taille de la fenêtre
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = screenSize.width / 4;
-            int height = screenSize.height / 4;
+            int width = 1280;
+            int height = 720;
             setSize(width, height);
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            // Création du panel pour la texture
+            JPanel texturePanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+
+                    // Dessin de la texture
+                    Image image = texture.getImage();
+                    g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            texturePanel.setPreferredSize(new Dimension(1280, 720));
 
             // Configuration du layout
             setLayout(new GridLayout(3, 1));
@@ -115,6 +152,9 @@ public class MainMenu extends JFrame {
             add(labelJoueur2);
             add(pseudoJoueur2Field);
             add(confirmerJoueur2Button);
+
+            // Configuration du layout de la fenêtre du sous-menu
+            getContentPane().add(texturePanel, BorderLayout.CENTER);
         }
 
         /**
@@ -166,5 +206,4 @@ public class MainMenu extends JFrame {
             }
         }
     }
-
-    }
+}
