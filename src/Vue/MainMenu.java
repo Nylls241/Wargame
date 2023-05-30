@@ -12,6 +12,8 @@ public class MainMenu extends JFrame {
 
     private JPanel buttonPanel;
     private ImageIcon texture;
+    private String pseudo1; // Pseudo du joueur 1
+    private String pseudo2; // Pseudo du joueur 2
 
     /**
      * Constructeur du menu principal.
@@ -65,6 +67,20 @@ public class MainMenu extends JFrame {
     }
 
     /**
+     * Méthode getter pour pseudo1.
+     */
+    public String getPseudo1() {
+        return pseudo1;
+    }
+
+    /**
+     * Méthode getter pour pseudo2.
+     */
+    public String getPseudo2() {
+        return pseudo2;
+    }
+
+    /**
      * Classe interne représentant l'écouteur d'événements pour le bouton "Nouvelle partie".
      */
     private class NouvellePartieListener implements ActionListener {
@@ -99,16 +115,12 @@ public class MainMenu extends JFrame {
 
         private JTextField pseudoJoueur1Field;
         private JTextField pseudoJoueur2Field;
-        private ImageIcon texture;
-        
 
         /**
          * Constructeur du sous-menu des pseudos.
          */
         public SousMenuPseudos(ImageIcon texture) {
             setTitle("Wargame");
-            this.texture = texture;
-
             // Calcul de la taille de la fenêtre
             int width = 1280;
             int height = 720;
@@ -164,14 +176,14 @@ public class MainMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String pseudoJoueur1 = pseudoJoueur1Field.getText();
+                pseudo1 = pseudoJoueur1Field.getText(); // Récupérer le pseudo du joueur 1
 
                 // Demande de confirmation
-                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 1 : " + pseudoJoueur1);
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 1 : " + pseudo1);
 
                 if (confirmation == JOptionPane.YES_OPTION) {
                     // Enregistrement du pseudo du joueur 1
-                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 1 enregistré : " + pseudoJoueur1);
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 1 enregistré : " + pseudo1);
                     pseudoJoueur1Field.setEditable(false); // Empêche la modification du pseudo
 
                     // Activation de la saisie pour le joueur 2
@@ -187,23 +199,28 @@ public class MainMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String pseudoJoueur2 = pseudoJoueur2Field.getText();
+                pseudo2 = pseudoJoueur2Field.getText(); // Récupérer le pseudo du joueur 2
 
                 // Demande de confirmation
-                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 2 : " + pseudoJoueur2);
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 2 : " + pseudo2);
 
                 if (confirmation == JOptionPane.YES_OPTION) {
                     // Enregistrement du pseudo du joueur 2
-                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 2 enregistré : " + pseudoJoueur2);
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 2 enregistré : " + pseudo2);
 
                     // Affichage des pseudos sur le terminal
-                    System.out.println("Pseudo Joueur 1 : " + pseudoJoueur1Field.getText());
-                    System.out.println("Pseudo Joueur 2 : " + pseudoJoueur2Field.getText());
+                    System.out.println("Pseudo Joueur 1 : " + pseudo1);
+                    System.out.println("Pseudo Joueur 2 : " + pseudo2);
 
                     // Fermeture de la fenêtre
                     dispose();
+                    // Lancer l'interface du plateau de jeu
+                    InterfacePlateau interfacePlateau = new InterfacePlateau();
+                    interfacePlateau.setVisible(true);
                 }
             }
         }
     }
 }
+
+
