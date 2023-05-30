@@ -1,11 +1,9 @@
 package Vue;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,16 +15,13 @@ import javax.swing.JScrollPane;
 public class InterfacePlateau extends JFrame {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
-    private static final int HEX_SIZE = 50;
+    private static final int HEX_SIZE = 21;
     private static final int HEX_HEIGHT = (int) (Math.sqrt(3) * HEX_SIZE);
     private static final int HEX_WIDTH = 2 * HEX_SIZE;
-    private static final int ROWS = 10; // Nombre de rangées d'hexagones
-    private static final int COLUMNS = 14; // Nombre de colonnes d'hexagones
+    private static final int ROWS = 30; // Nombre de rangées d'hexagones
+    private static final int COLUMNS = 40; // Nombre de colonnes d'hexagones
 
     private Image background;
-
-    // Variables pour la gestion du défilement
-    private Point clickPoint;
 
     /**
      * Constructeur de l'interface du plateau de jeu.
@@ -37,7 +32,7 @@ public class InterfacePlateau extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        background = new ImageIcon("plateau.png").getImage(); // Charger l'image du plateau de jeu
+        background = new ImageIcon("../textures/plateau1.png").getImage(); // Charger l'image du plateau de jeu
 
         JPanel panel = new JPanel() {
             @Override
@@ -49,37 +44,12 @@ public class InterfacePlateau extends JFrame {
             }
         };
 
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                clickPoint = e.getPoint();
-            }
+        JScrollPane scrollPane = new JScrollPane(panel); // Envelopper le panneau avec le JScrollPane
+        setContentPane(scrollPane); // Utiliser le JScrollPane comme contenu de la JFrame
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                clickPoint = null;
-            }
-        });
-
-        panel.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (clickPoint != null) {
-                    int dx = e.getX() - clickPoint.x;
-                    int dy = e.getY() - clickPoint.y;
-
-                    JScrollPane scrollPane = (JScrollPane) panel.getParent().getParent();
-                    scrollPane.getViewport().setViewPosition(
-                            new Point(scrollPane.getViewport().getViewPosition().x - dx,
-                                    scrollPane.getViewport().getViewPosition().y - dy));
-
-                    clickPoint = e.getPoint();
-                }
-            }
-        });
-
-        JScrollPane scrollPane = new JScrollPane(panel); // Encapsuler le panneau dans un JScrollPane
-        setContentPane(scrollPane);
+        // Ajuster la taille préférée du panneau pour permettre le défilement
+        panel.setPreferredSize(new Dimension(COLUMNS * HEX_WIDTH, ROWS * HEX_HEIGHT + HEX_HEIGHT / 2));
+        panel.revalidate();
     }
 
     /**
@@ -88,15 +58,20 @@ public class InterfacePlateau extends JFrame {
      * @param g l'objet Graphics pour dessiner
      */
     private void drawHexagons(Graphics g) {
-        int startX = (WIDTH - COLUMNS * HEX_WIDTH) / 2; // Coordonnée x du premier hexagone
-        int startY = (HEIGHT - ROWS * HEX_HEIGHT) / 2; // Coordonnée y du premier hexagone
+        int startX = 0;
+        int startY = 0;
 
         for (int row = 0; row < ROWS; row++) {
-            int offsetX = row % 2 == 0 ? 0 : HEX_WIDTH / 2; // Décalage horizontal pour les rangées impaires
-
             for (int col = 0; col < COLUMNS; col++) {
-                int x = startX + col * HEX_WIDTH + offsetX;
+                int x = startX + col * 3 * HEX_WIDTH / 4;
                 int y = startY + row * HEX_HEIGHT;
+
+                if (col % 2 == 1) {
+                    y += HEX_HEIGHT / 2;
+                    x -= HEX_WIDTH / 2;
+                } else {
+                    x -= HEX_WIDTH / 2;
+                }
 
                 drawHexagon(g, x, y);
             }
@@ -114,10 +89,10 @@ public class InterfacePlateau extends JFrame {
         int[] xPoints = {x, x + HEX_SIZE, x + HEX_SIZE + HEX_SIZE / 2, x + HEX_SIZE, x, x - HEX_SIZE / 2};
         int[] yPoints = {y + HEX_HEIGHT / 2, y + HEX_HEIGHT / 2, y, y - HEX_HEIGHT / 2, y - HEX_HEIGHT / 2, y};
 
-        g.setColor(new Color(0, 0, 0, 0)); // Couleur transparente pour l'hexagone
+        g.setColor(new Color(0, 0, 0)); // Couleur transparente pour l'hexagone
         g.drawPolygon(xPoints, yPoints, 6);
 
-        g.setColor(new Color(255, 0, 0, 20)); // Couleur de remplissage transparente pour l'hexagone
+        g.setColor(new Color(255, 0, 0, 0)); // Couleur de remplissage transparente pour l'hexagone
         g.fillPolygon(xPoints, yPoints, 6);
     }
 
