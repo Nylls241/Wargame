@@ -1,45 +1,133 @@
 package Vue;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
- * Classe représentant l'interface graphique du plateau de jeu de guerre.
+ * Interface graphique du plateau de jeu.
  */
 public class InterfacePlateau extends JFrame {
+    private static final int WIDTH = 1280;
+    private static final int HEIGHT = 720;
+    private static final int HEX_SIZE = 50;
+    private static final int HEX_HEIGHT = (int) (Math.sqrt(3) * HEX_SIZE);
+    private static final int HEX_WIDTH = 2 * HEX_SIZE;
+    private static final int ROWS = 10; // Nombre de rangées d'hexagones
+    private static final int COLUMNS = 14; // Nombre de colonnes d'hexagones
 
-    JFrame frame;
-    JLabel displayField;
-    ImageIcon image;
+    private Image background;
+
+    // Variables pour la gestion du défilement
+    private Point clickPoint;
 
     /**
-     * Constructeur de la classe InterfacePlateau.
+     * Constructeur de l'interface du plateau de jeu.
      */
     public InterfacePlateau() {
-        // Configuration de la fenêtre
-        frame = new JFrame("Plateau de jeu : WarGame");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        setTitle("Plateau de jeu");
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        // Dessinez la texture du plateau en utilisant une image
-            
-        try {
-            image = new ImageIcon(getClass().getResource("../textures/plateau.png"));
-            displayField = new JLabel(image);
-            frame.add(displayField);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            System.out.println("image non trouvé");
-        }
-            
-            frame.pack();
-            frame.setVisible(true);
+        background = new ImageIcon("plateau.png").getImage(); // Charger l'image du plateau de jeu
 
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(background, 0, 0, null); // Dessiner l'image du plateau de jeu
+
+                drawHexagons(g);
+            }
+        };
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                clickPoint = e.getPoint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                clickPoint = null;
+            }
+        });
+
+        panel.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (clickPoint != null) {
+                    int dx = e.getX() - clickPoint.x;
+                    int dy = e.getY() - clickPoint.y;
+
+                    JScrollPane scrollPane = (JScrollPane) panel.getParent().getParent();
+                    scrollPane.getViewport().setViewPosition(
+                            new Point(scrollPane.getViewport().getViewPosition().x - dx,
+                                    scrollPane.getViewport().getViewPosition().y - dy));
+
+                    clickPoint = e.getPoint();
+                }
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(panel); // Encapsuler le panneau dans un JScrollPane
+        setContentPane(scrollPane);
     }
-    
-   
+
+    /**
+     * Dessine les hexagones sur le plateau de jeu.
+     *
+     * @param g l'objet Graphics pour dessiner
+     */
+    private void drawHexagons(Graphics g) {
+        int startX = (WIDTH - COLUMNS * HEX_WIDTH) / 2; // Coordonnée x du premier hexagone
+        int startY = (HEIGHT - ROWS * HEX_HEIGHT) / 2; // Coordonnée y du premier hexagone
+
+        for (int row = 0; row < ROWS; row++) {
+            int offsetX = row % 2 == 0 ? 0 : HEX_WIDTH / 2; // Décalage horizontal pour les rangées impaires
+
+            for (int col = 0; col < COLUMNS; col++) {
+                int x = startX + col * HEX_WIDTH + offsetX;
+                int y = startY + row * HEX_HEIGHT;
+
+                drawHexagon(g, x, y);
+            }
+        }
+    }
+
+    /**
+     * Dessine un hexagone à une position donnée.
+     *
+     * @param g l'objet Graphics pour dessiner
+     * @param x la coordonnée x de l'hexagone
+     * @param y la coordonnée y de l'hexagone
+     */
+    private void drawHexagon(Graphics g, int x, int y) {
+        int[] xPoints = {x, x + HEX_SIZE, x + HEX_SIZE + HEX_SIZE / 2, x + HEX_SIZE, x, x - HEX_SIZE / 2};
+        int[] yPoints = {y + HEX_HEIGHT / 2, y + HEX_HEIGHT / 2, y, y - HEX_HEIGHT / 2, y - HEX_HEIGHT / 2, y};
+
+        g.setColor(new Color(0, 0, 0, 0)); // Couleur transparente pour l'hexagone
+        g.drawPolygon(xPoints, yPoints, 6);
+
+        g.setColor(new Color(255, 0, 0, 20)); // Couleur de remplissage transparente pour l'hexagone
+        g.fillPolygon(xPoints, yPoints, 6);
+    }
+
+    /**
+     * Méthode principale pour exécuter l'interface du plateau de jeu.
+     *
+     * @param args les arguments de ligne de commande (non utilisés ici)
+     */
+    public static void main(String[] args) {
+        InterfacePlateau interfacePlateau = new InterfacePlateau();
+        interfacePlateau.setVisible(true);
+    }
 }
