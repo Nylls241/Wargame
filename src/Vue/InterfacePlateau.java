@@ -1,4 +1,5 @@
 package Vue;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,29 +8,43 @@ import java.awt.*;
  */
 public class InterfacePlateau extends JFrame {
 
-    private JPanel panelPlateau; // Panel pour le plateau de jeu
+    private JFrame frame;
+    private JLabel displayField;
+    private ImageIcon image;
 
     /**
      * Constructeur de la classe InterfacePlateau.
      */
     public InterfacePlateau() {
         // Configuration de la fenêtre
-        setTitle("Plateau de Jeu de Guerre");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("Plateau de jeu : WarGame");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        // Création du panel pour le plateau de jeu
-        panelPlateau = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                // Dessinez les textures du plateau ici en utilisant les méthodes graphiques
-            }
-        };
-        panelPlateau.setPreferredSize(new Dimension(800, 600)); // Définissez la taille souhaitée du plateau
-        add(panelPlateau);
+        // Création d'un panneau pour contenir l'image
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(1280, 720)); // Ajustez la taille selon vos besoins
 
-        pack(); // Ajuster la taille de la fenêtre aux dimensions des composants
+        // Dessinez la texture du plateau en utilisant une image
+        try {
+            image = new ImageIcon(getClass().getResource("../textures/plateau1.png"));
+            displayField = new JLabel(image);
+            panel.add(displayField);
+        } catch (Exception e) {
+            System.out.println("image non trouvée");
+        }
+
+        // Création d'un composant JScrollPane pour permettre le défilement
+        JScrollPane scrollPane = new JScrollPane(panel);
+        frame.setContentPane(scrollPane);
+
+        frame.pack();
+        frame.setVisible(true);
     }
-   
+    public static void main(String[] args) {
+        InterfacePlateau interfacePlateau =new InterfacePlateau(); 
+        interfacePlateau.setVisible(true);
+        
+    }
+
 }

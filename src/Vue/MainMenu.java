@@ -10,19 +10,37 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu extends JFrame {
 
+    private JPanel buttonPanel;
+    private ImageIcon texture;
+    private String pseudo1; // Pseudo du joueur 1
+    private String pseudo2; // Pseudo du joueur 2
+
     /**
      * Constructeur du menu principal.
      */
     public MainMenu() {
-        setTitle("Menu Principal");
+        setTitle("Wargame");
+
+        // Chargement de la texture
+        texture = new ImageIcon("../textures/debut.jpg");
 
         // Calcul de la taille de la fenêtre
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = screenSize.width / 4;
-        int height = screenSize.height / 4;
-        setSize(width, height);
+        setSize(1280, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Création du panel pour la texture
+        JPanel texturePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // Dessin de la texture
+                Image image = texture.getImage();
+                g.drawImage(image, 0, 0, 1280, 720, this);
+            }
+        };
+        texturePanel.setPreferredSize(new Dimension(1280, 720));
 
         // Création des boutons
         JButton nouvellePartieButton = new JButton("Nouvelle partie");
@@ -33,13 +51,33 @@ public class MainMenu extends JFrame {
         nouvellePartieButton.addActionListener(new NouvellePartieListener());
         quitterButton.addActionListener(new QuitterListener());
 
-        // Configuration du layout
-        setLayout(new GridLayout(3, 1));
+        // Création du panel pour les boutons
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(3, 1));
 
-        // Ajout des boutons au menu principal
-        add(nouvellePartieButton);
-        add(chargerSauvegardeButton);
-        add(quitterButton);
+        // Ajout des boutons au panel des boutons
+        buttonPanel.add(nouvellePartieButton);
+        buttonPanel.add(chargerSauvegardeButton);
+        buttonPanel.add(quitterButton);
+
+        // Configuration du layout de la fenêtre principale
+        setLayout(new BorderLayout());
+        getContentPane().add(texturePanel, BorderLayout.CENTER);
+        getContentPane().add(buttonPanel, BorderLayout.EAST);
+    }
+
+    /**
+     * Méthode getter pour pseudo1.
+     */
+    public String getPseudo1() {
+        return pseudo1;
+    }
+
+    /**
+     * Méthode getter pour pseudo2.
+     */
+    public String getPseudo2() {
+        return pseudo2;
     }
 
     /**
@@ -53,7 +91,7 @@ public class MainMenu extends JFrame {
             dispose();
 
             // Afficher le sous-menu pour demander les pseudos des joueurs
-            SousMenuPseudos sousMenuPseudos = new SousMenuPseudos();
+            SousMenuPseudos sousMenuPseudos = new SousMenuPseudos(texture);
             sousMenuPseudos.setVisible(true);
         }
     }
@@ -81,16 +119,27 @@ public class MainMenu extends JFrame {
         /**
          * Constructeur du sous-menu des pseudos.
          */
-        public SousMenuPseudos() {
-            setTitle("Sous-menu des pseudos");
-
+        public SousMenuPseudos(ImageIcon texture) {
+            setTitle("Wargame");
             // Calcul de la taille de la fenêtre
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = screenSize.width / 4;
-            int height = screenSize.height / 4;
+            int width = 1280;
+            int height = 720;
             setSize(width, height);
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            // Création du panel pour la texture
+            JPanel texturePanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+
+                    // Dessin de la texture
+                    Image image = texture.getImage();
+                    g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            texturePanel.setPreferredSize(new Dimension(1280, 720));
 
             // Configuration du layout
             setLayout(new GridLayout(3, 1));
@@ -115,6 +164,9 @@ public class MainMenu extends JFrame {
             add(labelJoueur2);
             add(pseudoJoueur2Field);
             add(confirmerJoueur2Button);
+
+            // Configuration du layout de la fenêtre du sous-menu
+            getContentPane().add(texturePanel, BorderLayout.CENTER);
         }
 
         /**
@@ -124,14 +176,14 @@ public class MainMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String pseudoJoueur1 = pseudoJoueur1Field.getText();
+                pseudo1 = pseudoJoueur1Field.getText(); // Récupérer le pseudo du joueur 1
 
                 // Demande de confirmation
-                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 1 : " + pseudoJoueur1);
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 1 : " + pseudo1);
 
                 if (confirmation == JOptionPane.YES_OPTION) {
                     // Enregistrement du pseudo du joueur 1
-                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 1 enregistré : " + pseudoJoueur1);
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 1 enregistré : " + pseudo1);
                     pseudoJoueur1Field.setEditable(false); // Empêche la modification du pseudo
 
                     // Activation de la saisie pour le joueur 2
@@ -147,24 +199,28 @@ public class MainMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String pseudoJoueur2 = pseudoJoueur2Field.getText();
+                pseudo2 = pseudoJoueur2Field.getText(); // Récupérer le pseudo du joueur 2
 
                 // Demande de confirmation
-                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 2 : " + pseudoJoueur2);
+                int confirmation = JOptionPane.showConfirmDialog(null, "Confirmer le pseudo du Joueur 2 : " + pseudo2);
 
                 if (confirmation == JOptionPane.YES_OPTION) {
                     // Enregistrement du pseudo du joueur 2
-                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 2 enregistré : " + pseudoJoueur2);
+                    JOptionPane.showMessageDialog(null, "Pseudo du Joueur 2 enregistré : " + pseudo2);
 
                     // Affichage des pseudos sur le terminal
-                    System.out.println("Pseudo Joueur 1 : " + pseudoJoueur1Field.getText());
-                    System.out.println("Pseudo Joueur 2 : " + pseudoJoueur2Field.getText());
+                    System.out.println("Pseudo Joueur 1 : " + pseudo1);
+                    System.out.println("Pseudo Joueur 2 : " + pseudo2);
 
                     // Fermeture de la fenêtre
                     dispose();
+                    // Lancer l'interface du plateau de jeu
+                    InterfacePlateau interfacePlateau = new InterfacePlateau();
+                    interfacePlateau.setVisible(true);
                 }
             }
         }
     }
+}
 
-    }
+
