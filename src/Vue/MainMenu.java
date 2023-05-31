@@ -99,16 +99,11 @@ public class MainMenu extends JFrame {
 
         private JTextField pseudoJoueur1Field;
         private JTextField pseudoJoueur2Field;
-        private ImageIcon texture;
-        
-
         /**
          * Constructeur du sous-menu des pseudos.
          */
         public SousMenuPseudos(ImageIcon texture) {
             setTitle("Wargame");
-            this.texture = texture;
-
             // Calcul de la taille de la fenêtre
             int width = 1280;
             int height = 720;
