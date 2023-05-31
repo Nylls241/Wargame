@@ -41,10 +41,5 @@ public class InterfacePlateau extends JFrame {
         frame.pack();
         frame.setVisible(true);
     }
-    public static void main(String[] args) {
-        InterfacePlateau interfacePlateau =new InterfacePlateau(); 
-        interfacePlateau.setVisible(true);
-        
-    }
 
 }
