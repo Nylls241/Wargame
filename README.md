@@ -10,7 +10,7 @@ L'espace de travail contient quatres dossiers principales , où :
         - `Model`: 
         - `Vue`: 
         - `Controleur`:
-        - `images`: 
+        - `textures`: 
 - `lib`: le dossier pour maintenir les dépendances.
 - `rapports`: le dossier pour conserver nos diagrammes et notre rapports.
 
