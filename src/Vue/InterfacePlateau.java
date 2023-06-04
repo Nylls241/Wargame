@@ -151,28 +151,33 @@ public class InterfacePlateau extends JFrame {
     }
 
     private void drawHexagons(Graphics2D g2d) {
+        // ...
+    
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
                 int y = row * HEX_HEIGHT;
-
+    
                 if (col % 2 == 1) {
                     y += HEX_HEIGHT / 2;
                 }
-
-                //drawHexagon(g2d, x, y);
-
+    
                 // Dessiner la surbrillance sur l'hexagone sélectionné
                 if (selectedHexagonX == col && selectedHexagonY == row) {
                     drawSelectedHexagon(g2d);
                 }
-
+    
+                // Dessiner l'hexagone
+                //drawHexagon(g2d, x, y);
+    
                 // Dessiner l'unité sur l'hexagone
                 String unit = unitMap[row][col];
                 if (unit != null) {
                     Image unitImage = getImageForUnit(unit);
                     if (unitImage != null) {
-                        g2d.drawImage(unitImage, x, y, null);
+                        int unitX = x + (HEX_WIDTH - unitImage.getWidth(null)) / 2;
+                        int unitY = y + (HEX_HEIGHT - unitImage.getHeight(null)) / 2 - HEX_HEIGHT / 4;
+                        g2d.drawImage(unitImage, unitX-10, unitY-10, null);
                     }
                 }
             }
