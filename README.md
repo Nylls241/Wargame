@@ -107,7 +107,19 @@ joueur suivant.
 
 ## Instructions d'installation
 
+# Prérequis 
+Avoir un JDK, pour pouvoir utiliser ce projet.
+# Téléchargement du code source 
+git clone https://github.com/Nylls241/Wargame.git
+
+
 ## Guide d'utilisation
+Après avoir suivi les instructions de la partie précédentes faite ceci pour pouvoir exécutez le projet sur votre machine : 
+# Sur un terminal Linux : 
+
+# Sur un IDE, en particulier VS code : 
+Il vous suffit de <run>(exécuter) la classse LancerPartie se trouvant dans src/Controleur.
+N.B : Nous avons utilisez particulièrement dans ce projet l'IDE VS code, pour d'autres IDE, renseignez vous sur net svp.
 
 ##  Structure des dossiers
 
