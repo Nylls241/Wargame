@@ -2,6 +2,8 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class InterfacePlateau extends JFrame {
 
@@ -67,9 +69,47 @@ public class InterfacePlateau extends JFrame {
 
                 // Dessiner les hexagones et les unités
                 drawHexagons(g2d);
+                drawSelectedHexagon(g2d);
             }
         };
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // Ajustez la taille selon vos besoins
+
+        // Ajouter le gestionnaire d'événements de clic de souris
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+                // Parcourir tous les hexagones pour trouver celui qui correspond aux coordonnées de la souris
+                for (int row = 0; row < ROWS; row++) {
+                    for (int col = 0; col < COLUMNS; col++) {
+                        int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+                        int y = row * HEX_HEIGHT;
+
+                        if (col % 2 == 1) {
+                            y += HEX_HEIGHT / 2;
+                        }
+
+                        if (isMouseInsideHexagon(mouseX, mouseY, x, y)) {
+                            selectedHexagonX = col;
+                            selectedHexagonY = row;
+
+                            // Redessiner les hexagones
+                            panel.repaint();
+                            return; // Sortir de la boucle si un hexagone est sélectionné
+                        }
+                    }
+                }
+
+                // Aucun hexagone sélectionné si aucun n'a été trouvé
+                selectedHexagonX = -1;
+                selectedHexagonY = -1;
+
+                // Redessiner les hexagones
+                panel.repaint();
+            }
+        });
 
         // Création d'un composant JScrollPane pour permettre le défilement
         JScrollPane scrollPane = new JScrollPane(panel);
@@ -90,7 +130,7 @@ public class InterfacePlateau extends JFrame {
                     y += HEX_HEIGHT / 2;
                 }
 
-                //drawHexagon(g2d, x, y);
+                drawHexagon(g2d, x, y);
 
                 // Dessiner l'unité sur l'hexagone
                 String unit = unitMap[row][col];
@@ -105,14 +145,41 @@ public class InterfacePlateau extends JFrame {
     }
 
     private void drawHexagon(Graphics2D g2d, int x, int y) {
-        int[] xPoints = { x, x + HEX_SIZE, x + HEX_SIZE + HEX_SIZE / 2, x + HEX_SIZE, x, x - HEX_SIZE / 2 };
-        int[] yPoints = { y + HEX_HEIGHT / 2, y + HEX_HEIGHT / 2, y, y - HEX_HEIGHT / 2, y - HEX_HEIGHT / 2, y };
+        int[] xPoints = getHexagonXPoints(x);
+        int[] yPoints = getHexagonYPoints(y);
 
         g2d.setColor(new Color(0, 0, 0)); // Couleur transparente pour l'hexagone
-        g2d.drawPolygon(xPoints, yPoints, 6);
+        //g2d.drawPolygon(xPoints, yPoints, 6);
 
-        g2d.setColor(new Color(0, 0,0,0)); // Couleur de remplissage transparente pour l'hexagone
+        g2d.setColor(new Color(0, 0, 0, 0)); // Couleur de remplissage transparente pour l'hexagone
         g2d.fillPolygon(xPoints, yPoints, 6);
+    }
+
+    private void drawSelectedHexagon(Graphics2D g2d) {
+        if (selectedHexagonX != -1 && selectedHexagonY != -1) {
+            int x = selectedHexagonX * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+            int y = selectedHexagonY * HEX_HEIGHT;
+
+            if (selectedHexagonX % 2 == 1) {
+                y += HEX_HEIGHT / 2;
+            }
+
+            int[] xPoints = getHexagonXPoints(x);
+            int[] yPoints = getHexagonYPoints(y);
+
+            g2d.setColor(Color.RED);
+            g2d.drawPolygon(xPoints, yPoints, 6);
+        }
+    }
+
+    private int[] getHexagonXPoints(int x) {
+        int[] xPoints = { x, x + HEX_SIZE, x + HEX_SIZE + HEX_SIZE / 2, x + HEX_SIZE, x, x - HEX_SIZE / 2 };
+        return xPoints;
+    }
+
+    private int[] getHexagonYPoints(int y) {
+        int[] yPoints = { y + HEX_HEIGHT / 2, y + HEX_HEIGHT / 2, y, y - HEX_HEIGHT / 2, y - HEX_HEIGHT / 2, y };
+        return yPoints;
     }
 
     private Image getImageForUnit(String unit) {
@@ -144,6 +211,14 @@ public class InterfacePlateau extends JFrame {
         unitMap[7][10] = "Cavalerie";
         unitMap[9][15] = "Mage";
         unitMap[11][20] = "Archer";
+    }
+
+    private boolean isMouseInsideHexagon(int mouseX, int mouseY, int hexagonX, int hexagonY) {
+        int[] xPoints = getHexagonXPoints(hexagonX);
+        int[] yPoints = getHexagonYPoints(hexagonY);
+
+        Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+        return hexagon.contains(mouseX, mouseY);
     }
 
     public static void main(String[] args) {
