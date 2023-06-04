@@ -1,6 +1,6 @@
-## Wargame (jeu de guerre)
+# Wargame (jeu de guerre)
 
-## Description du projet 
+# Description du projet 
 
 L'objectif de ce projet est de réaliser une version informatique d'un jeu de Wargame tactique tour par tour.
 
@@ -105,23 +105,23 @@ pourrait être différent pour chaque joueur. Lorsque le temps est écoulé, la 
 joueur suivant.
 
 
-## Instructions d'installation
+# Instructions d'installation
 
-# Prérequis 
+## Prérequis 
 Avoir un JDK, pour pouvoir utiliser ce projet.
-# Téléchargement du code source 
+## Téléchargement du code source 
 git clone https://github.com/Nylls241/Wargame.git
 
 
-## Guide d'utilisation
+# Guide d'utilisation
 Après avoir suivi les instructions de la partie précédentes faite ceci pour pouvoir exécutez le projet sur votre machine : 
-# Sur un terminal Linux : 
+## Sur un terminal Linux : 
 
-# Sur un IDE, en particulier VS code : 
+## Sur un IDE, en particulier VS code : 
 Il vous suffit de <run>(exécuter) la classse LancerPartie se trouvant dans src/Controleur.
 N.B : Nous avons utilisez particulièrement dans ce projet l'IDE VS code, pour d'autres IDE, renseignez vous sur net svp.
 
-##  Structure des dossiers
+#  Structure des dossiers
 
 L'espace de travail contient bin  dossiers principales , où :
 
