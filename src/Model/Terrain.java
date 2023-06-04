@@ -41,7 +41,7 @@ public abstract class Terrain {
         return occupable;
     }
 }
-class Forêt extends Terrain {
+class Foret extends Terrain {
 
         /**
          * Constructeur de la classe Forêt
@@ -49,7 +49,7 @@ class Forêt extends Terrain {
          * 2 pointDeplacement par case de forêt
          * les forêts sont occupables.
          */
-        public Forêt() 
+        public Foret() 
         {
         	super();
             this.bonusDef = 40;
