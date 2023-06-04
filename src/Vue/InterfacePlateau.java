@@ -21,7 +21,6 @@ public class InterfacePlateau extends JFrame {
     private int selectedHexagonX = -1; // Valeur par défaut pour indiquer qu'aucun hexagone n'est sélectionné
     private int selectedHexagonY = -1;
 
-
     private Image infanterieImage;
     private Image infanterieLourdeImage;
     private Image cavalerieImage;
@@ -29,6 +28,9 @@ public class InterfacePlateau extends JFrame {
     private Image archerImage;
 
     private String[][] unitMap;
+
+    private JPanel buttonPanel;
+    private JButton selectUnitButton;
 
     /**
      * Constructeur de la classe InterfacePlateau.
@@ -69,12 +71,48 @@ public class InterfacePlateau extends JFrame {
 
                 // Dessiner les hexagones et les unités
                 drawHexagons(g2d);
-                drawSelectedHexagon(g2d);
             }
         };
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // Ajustez la taille selon vos besoins
 
-        // Ajouter le gestionnaire d'événements de clic de souris
+        // Création du conteneur du bouton de sélection d'unité
+        buttonPanel = new JPanel();
+        selectUnitButton = new JButton("Sélectionner une unité");
+        buttonPanel.add(selectUnitButton);
+
+        // Création d'un composant JScrollPane pour permettre le défilement
+        JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setColumnHeaderView(buttonPanel);
+
+        setContentPane(scrollPane);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+        // Gestionnaire d'événements pour le bouton de sélection d'unité
+        selectUnitButton.addActionListener(e -> {
+            if (selectedHexagonX != -1 && selectedHexagonY != -1) {
+                // Lancement de la boîte de dialogue pour la sélection d'unité
+                String[] units = {"Infanterie", "InfanterieLourde", "Cavalerie", "Mage", "Archer"};
+                String selectedUnit = (String) JOptionPane.showInputDialog(
+                        this,
+                        "Sélectionnez une unité :",
+                        "Sélection d'unité",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        units,
+                        units[0]);
+
+                // Mise à jour de la carte des unités avec l'unité sélectionnée
+                unitMap[selectedHexagonY][selectedHexagonX] = selectedUnit;
+
+                // Rafraîchir l'affichage
+                repaint();
+            }
+        });
+
+        // Gestionnaire d'événements pour le clic sur les hexagones
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -110,14 +148,6 @@ public class InterfacePlateau extends JFrame {
                 panel.repaint();
             }
         });
-
-        // Création d'un composant JScrollPane pour permettre le défilement
-        JScrollPane scrollPane = new JScrollPane(panel);
-        setContentPane(scrollPane);
-
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void drawHexagons(Graphics2D g2d) {
@@ -130,7 +160,12 @@ public class InterfacePlateau extends JFrame {
                     y += HEX_HEIGHT / 2;
                 }
 
-                drawHexagon(g2d, x, y);
+                //drawHexagon(g2d, x, y);
+
+                // Dessiner la surbrillance sur l'hexagone sélectionné
+                if (selectedHexagonX == col && selectedHexagonY == row) {
+                    drawSelectedHexagon(g2d);
+                }
 
                 // Dessiner l'unité sur l'hexagone
                 String unit = unitMap[row][col];
@@ -142,17 +177,6 @@ public class InterfacePlateau extends JFrame {
                 }
             }
         }
-    }
-
-    private void drawHexagon(Graphics2D g2d, int x, int y) {
-        int[] xPoints = getHexagonXPoints(x);
-        int[] yPoints = getHexagonYPoints(y);
-
-        g2d.setColor(new Color(0, 0, 0)); // Couleur transparente pour l'hexagone
-        //g2d.drawPolygon(xPoints, yPoints, 6);
-
-        g2d.setColor(new Color(0, 0, 0, 0)); // Couleur de remplissage transparente pour l'hexagone
-        g2d.fillPolygon(xPoints, yPoints, 6);
     }
 
     private void drawSelectedHexagon(Graphics2D g2d) {
@@ -170,6 +194,14 @@ public class InterfacePlateau extends JFrame {
             g2d.setColor(Color.RED);
             g2d.drawPolygon(xPoints, yPoints, 6);
         }
+    }
+
+    private boolean isMouseInsideHexagon(int mouseX, int mouseY, int hexagonX, int hexagonY) {
+        int[] xPoints = getHexagonXPoints(hexagonX);
+        int[] yPoints = getHexagonYPoints(hexagonY);
+
+        Polygon hexagon = new Polygon(xPoints, yPoints, 6);
+        return hexagon.contains(mouseX, mouseY);
     }
 
     private int[] getHexagonXPoints(int x) {
@@ -198,30 +230,15 @@ public class InterfacePlateau extends JFrame {
     }
 
     private void initializeUnitMap() {
-        // Initialiser la carte des unités avec des valeurs par défaut (null)
+        // Initialiser la carte des unités avec des valeurs par défaut
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 unitMap[row][col] = null;
             }
         }
-
-        // Exemples d'ajout d'unités sur la carte (modifiable selon vos besoins)
-        unitMap[1][2] = "Infanterie";
-        unitMap[3][5] = "InfanterieLourde";
-        unitMap[7][10] = "Cavalerie";
-        unitMap[9][15] = "Mage";
-        unitMap[11][20] = "Archer";
-    }
-
-    private boolean isMouseInsideHexagon(int mouseX, int mouseY, int hexagonX, int hexagonY) {
-        int[] xPoints = getHexagonXPoints(hexagonX);
-        int[] yPoints = getHexagonYPoints(hexagonY);
-
-        Polygon hexagon = new Polygon(xPoints, yPoints, 6);
-        return hexagon.contains(mouseX, mouseY);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new InterfacePlateau());
+        SwingUtilities.invokeLater(InterfacePlateau::new);
     }
 }
