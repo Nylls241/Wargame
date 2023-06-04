@@ -88,18 +88,7 @@ public class TerrainController {
         map[25][1] = new Foret();
         map[26][1] = new EauProfonde();
         map[27][1] = new Plaine();
-        map[28][1] = new ();
-        map[29][1] = new ();
-        map[30][1] = new ();
-        map[31][1] = new ();
-        map[32][1] = new ();
-        map[33][1] = new ();
-        map[34][1] = new ();
-        map[35][1] = new ();
-        map[36][1] = new ();
-        map[37][1] = new ();
-        map[38][1] = new ();
-        map[39][1] = new ();
+       
 
         
 

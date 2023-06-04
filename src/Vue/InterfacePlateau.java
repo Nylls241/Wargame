@@ -1,4 +1,5 @@
 package Vue;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,6 +16,17 @@ public class InterfacePlateau extends JFrame {
     private static final int HEX_WIDTH = 2 * HEX_SIZE;
     private static final int ROWS = 31;
     private static final int COLUMNS = 41;
+    private int selectedHexagonX = -1; // Valeur par défaut pour indiquer qu'aucun hexagone n'est sélectionné
+    private int selectedHexagonY = -1;
+
+
+    private Image infanterieImage;
+    private Image infanterieLourdeImage;
+    private Image cavalerieImage;
+    private Image mageImage;
+    private Image archerImage;
+
+    private String[][] unitMap;
 
     /**
      * Constructeur de la classe InterfacePlateau.
@@ -32,6 +44,17 @@ public class InterfacePlateau extends JFrame {
             System.out.println("Image non trouvée");
         }
 
+        // Charger les images des unités
+        infanterieImage = new ImageIcon(getClass().getResource("Infanterie2.png")).getImage();
+        infanterieLourdeImage = new ImageIcon(getClass().getResource("InfanterieLourde2.png")).getImage();
+        cavalerieImage = new ImageIcon(getClass().getResource("Cavalerie2.png")).getImage();
+        mageImage = new ImageIcon(getClass().getResource("Mage2.png")).getImage();
+        archerImage = new ImageIcon(getClass().getResource("Archer2.png")).getImage();
+
+        // Initialiser la carte des unités
+        unitMap = new String[ROWS][COLUMNS];
+        initializeUnitMap();
+
         // Création d'un panneau pour contenir l'image et la grille d'hexagones
         JPanel panel = new JPanel() {
             @Override
@@ -42,7 +65,7 @@ public class InterfacePlateau extends JFrame {
                 // Dessiner l'image de fond
                 g2d.drawImage(background, 0, 0, null);
 
-                // Dessiner les hexagones
+                // Dessiner les hexagones et les unités
                 drawHexagons(g2d);
             }
         };
@@ -58,33 +81,25 @@ public class InterfacePlateau extends JFrame {
     }
 
     private void drawHexagons(Graphics2D g2d) {
-        
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
-                int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2 ;
-                int y = row * HEX_HEIGHT ;
+                int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+                int y = row * HEX_HEIGHT;
 
-                /* 
-                if (row % 3 == 0 && row !=0 && col % 2 == 0){
-                    y += 1; 
-                }
-
-                if (col % 2 == 1 && row = 3){
-                    y +=1;
-                }
-
-               // if (col % 2 == 1 &&
-
-               */
-
-
-                
                 if (col % 2 == 1) {
                     y += HEX_HEIGHT / 2;
                 }
-                
 
-                drawHexagon(g2d, x, y);
+                //drawHexagon(g2d, x, y);
+
+                // Dessiner l'unité sur l'hexagone
+                String unit = unitMap[row][col];
+                if (unit != null) {
+                    Image unitImage = getImageForUnit(unit);
+                    if (unitImage != null) {
+                        g2d.drawImage(unitImage, x, y, null);
+                    }
+                }
             }
         }
     }
@@ -96,16 +111,42 @@ public class InterfacePlateau extends JFrame {
         g2d.setColor(new Color(0, 0, 0)); // Couleur transparente pour l'hexagone
         g2d.drawPolygon(xPoints, yPoints, 6);
 
-        g2d.setColor(new Color(255, 255, 255, 100)); // Couleur de remplissage transparente pour l'hexagone
+        g2d.setColor(new Color(0, 0,0,0)); // Couleur de remplissage transparente pour l'hexagone
         g2d.fillPolygon(xPoints, yPoints, 6);
     }
 
+    private Image getImageForUnit(String unit) {
+        if (unit.equals("Infanterie")) {
+            return infanterieImage;
+        } else if (unit.equals("InfanterieLourde")) {
+            return infanterieLourdeImage;
+        } else if (unit.equals("Cavalerie")) {
+            return cavalerieImage;
+        } else if (unit.equals("Mage")) {
+            return mageImage;
+        } else if (unit.equals("Archer")) {
+            return archerImage;
+        }
+        return null;
+    }
 
+    private void initializeUnitMap() {
+        // Initialiser la carte des unités avec des valeurs par défaut (null)
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                unitMap[row][col] = null;
+            }
+        }
 
-    
+        // Exemples d'ajout d'unités sur la carte (modifiable selon vos besoins)
+        unitMap[1][2] = "Infanterie";
+        unitMap[3][5] = "InfanterieLourde";
+        unitMap[7][10] = "Cavalerie";
+        unitMap[9][15] = "Mage";
+        unitMap[11][20] = "Archer";
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new InterfacePlateau());
     }
-
-    
 }
