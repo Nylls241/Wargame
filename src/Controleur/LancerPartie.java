@@ -20,7 +20,7 @@ public class LancerPartie {
      */
     public LancerPartie() {
         // Création du modèle du plateau
-        plateau = new Plateau();
+        //plateau = new Plateau();
 
         // Création de l'interface graphique du plateau
         mainMenu = new MainMenu();
@@ -43,8 +43,8 @@ public class LancerPartie {
 
         if (pseudo1 != null && !pseudo1.isEmpty() && pseudo2 != null && !pseudo2.isEmpty()) {
             // Création des joueurs avec des identifiants aléatoires
-            joueur1 = new Joueur(pseudo1, numero.nextInt(3) + 1, couleur.nextInt(3) + 4);
-            joueur2 = new Joueur(pseudo2, numero.nextInt(3) + 4, couleur.nextInt(3) + 1);
+           // joueur1 = new Joueur(pseudo1, numero.nextInt(3) + 1, couleur.nextInt(3) + 4);
+            //joueur2 = new Joueur(pseudo2, numero.nextInt(3) + 4, couleur.nextInt(3) + 1);
 
             // Initialisation du plateau de jeu
 

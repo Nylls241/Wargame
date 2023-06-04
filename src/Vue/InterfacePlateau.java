@@ -31,6 +31,10 @@ public class InterfacePlateau extends JFrame {
 
     private JPanel buttonPanel;
     private JButton selectUnitButton;
+    private JButton moveUnitButton;
+    private boolean isMovingUnit = false; // Indique si le mode de déplacement d'unité est activé
+    private int selectedUnitX = -1; // Coordonnées de l'unité sélectionnée
+    private int selectedUnitY = -1;
 
     /**
      * Constructeur de la classe InterfacePlateau.
@@ -80,6 +84,10 @@ public class InterfacePlateau extends JFrame {
         selectUnitButton = new JButton("Sélectionner une unité");
         buttonPanel.add(selectUnitButton);
 
+        // Création du bouton de déplacement d'unité
+        moveUnitButton = new JButton("Déplacer une unité");
+        buttonPanel.add(moveUnitButton);
+
         // Création d'un composant JScrollPane pour permettre le défilement
         JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setColumnHeaderView(buttonPanel);
@@ -112,6 +120,21 @@ public class InterfacePlateau extends JFrame {
             }
         });
 
+        // Gestionnaire d'événements pour le bouton de déplacement d'unité
+        moveUnitButton.addActionListener(e -> {
+            if (!isMovingUnit) {
+                // Activer le mode de déplacement d'unité
+                isMovingUnit = true;
+                moveUnitButton.setText("Annuler le déplacement");
+            } else {
+                // Désactiver le mode de déplacement d'unité
+                isMovingUnit = false;
+                moveUnitButton.setText("Déplacer une unité");
+                selectedUnitX = -1;
+                selectedUnitY = -1;
+            }
+        });
+
         // Gestionnaire d'événements pour le clic sur les hexagones
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -119,69 +142,68 @@ public class InterfacePlateau extends JFrame {
                 int mouseX = e.getX();
                 int mouseY = e.getY();
 
-                // Parcourir tous les hexagones pour trouver celui qui correspond aux coordonnées de la souris
-                for (int row = 0; row < ROWS; row++) {
-                    for (int col = 0; col < COLUMNS; col++) {
-                        int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
-                        int y = row * HEX_HEIGHT;
+                if (isMovingUnit) {
+                    // Mode de déplacement d'unité activé
 
-                        if (col % 2 == 1) {
-                            y += HEX_HEIGHT / 2;
-                        }
+                    // Parcourir tous les hexagones pour trouver celui qui correspond aux coordonnées de la souris
+                    for (int row = 0; row < ROWS; row++) {
+                        for (int col = 0; col < COLUMNS; col++) {
+                            int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+                            int y = row * HEX_HEIGHT;
 
-                        if (isMouseInsideHexagon(mouseX, mouseY, x, y)) {
-                            selectedHexagonX = col;
-                            selectedHexagonY = row;
+                            if (col % 2 == 1) {
+                                y += HEX_HEIGHT / 2;
+                            }
 
-                            // Redessiner les hexagones
-                            panel.repaint();
-                            return; // Sortir de la boucle si un hexagone est sélectionné
+                            if (isMouseInsideHexagon(mouseX, mouseY, x, y)) {
+                                if (selectedUnitX == -1 && selectedUnitY == -1) {
+                                    // Aucune unité sélectionnée, sélectionner l'unité à déplacer
+                                    if (unitMap[row][col] != null) {
+                                        selectedUnitX = col;
+                                        selectedUnitY = row;
+                                    }
+                                } else {
+                                    // Case de destination sélectionnée, déplacer l'unité
+                                    unitMap[row][col] = unitMap[selectedUnitY][selectedUnitX];
+                                    unitMap[selectedUnitY][selectedUnitX] = null;
+                                    selectedUnitX = -1;
+                                    selectedUnitY = -1;
+                                    isMovingUnit = false;
+                                    moveUnitButton.setText("Déplacer une unité");
+                                }
+                                break;
+                            }
                         }
                     }
+
+                    // Rafraîchir l'affichage
+                    repaint();
+                } else {
+                    // Mode de déplacement d'unité désactivé
+
+                    // Parcourir tous les hexagones pour trouver celui qui correspond aux coordonnées de la souris
+                    for (int row = 0; row < ROWS; row++) {
+                        for (int col = 0; col < COLUMNS; col++) {
+                            int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+                            int y = row * HEX_HEIGHT;
+
+                            if (col % 2 == 1) {
+                                y += HEX_HEIGHT / 2;
+                            }
+
+                            if (isMouseInsideHexagon(mouseX, mouseY, x, y)) {
+                                selectedHexagonX = col;
+                                selectedHexagonY = row;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Rafraîchir l'affichage
+                    repaint();
                 }
-
-                // Aucun hexagone sélectionné si aucun n'a été trouvé
-                selectedHexagonX = -1;
-                selectedHexagonY = -1;
-
-                // Redessiner les hexagones
-                panel.repaint();
             }
         });
-    }
-
-    private void drawHexagons(Graphics2D g2d) {
-        // ...
-    
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
-                int y = row * HEX_HEIGHT;
-    
-                if (col % 2 == 1) {
-                    y += HEX_HEIGHT / 2;
-                }
-    
-                // Dessiner la surbrillance sur l'hexagone sélectionné
-                if (selectedHexagonX == col && selectedHexagonY == row) {
-                    drawSelectedHexagon(g2d);
-                }
-    
-                // Dessiner l'hexagone
-                //drawHexagon(g2d, x, y);
-    
-                // Dessiner l'unité sur l'hexagone
-                String unit = unitMap[row][col];
-                if (unit != null) {
-                    Image unitImage = getImageForUnit(unit);
-                    if (unitImage != null) {
-                        int unitX = x + (HEX_WIDTH - unitImage.getWidth(null)) / 2;
-                        int unitY = y + (HEX_HEIGHT - unitImage.getHeight(null)) / 2 - HEX_HEIGHT / 4;
-                        g2d.drawImage(unitImage, unitX-10, unitY-10, null);
-                    }
-                }
-            }
-        }
     }
 
     private void drawSelectedHexagon(Graphics2D g2d) {
@@ -201,13 +223,26 @@ public class InterfacePlateau extends JFrame {
         }
     }
 
-    private boolean isMouseInsideHexagon(int mouseX, int mouseY, int hexagonX, int hexagonY) {
-        int[] xPoints = getHexagonXPoints(hexagonX);
-        int[] yPoints = getHexagonYPoints(hexagonY);
 
+
+
+
+    /**
+     * Vérifie si les coordonnées de la souris sont à l'intérieur de l'hexagone.
+     *
+     * @param mouseX Coordonnée X de la souris
+     * @param mouseY Coordonnée Y de la souris
+     * @param hexX   Coordonnée X de l'hexagone
+     * @param hexY   Coordonnée Y de l'hexagone
+     * @return true si les coordonnées de la souris sont à l'intérieur de l'hexagone, sinon false
+     */
+    private boolean isMouseInsideHexagon(int mouseX, int mouseY, int hexX, int hexY) {
+        int[] xPoints = {hexX + HEX_WIDTH / 4, hexX + 3 * HEX_WIDTH / 4, hexX + HEX_WIDTH, hexX + 3 * HEX_WIDTH / 4, hexX + HEX_WIDTH / 4, hexX};
+        int[] yPoints = {hexY, hexY, hexY + HEX_HEIGHT / 2, hexY + HEX_HEIGHT, hexY + HEX_HEIGHT, hexY + HEX_HEIGHT / 2};
         Polygon hexagon = new Polygon(xPoints, yPoints, 6);
         return hexagon.contains(mouseX, mouseY);
     }
+
 
     private int[] getHexagonXPoints(int x) {
         int[] xPoints = { x, x + HEX_SIZE, x + HEX_SIZE + HEX_SIZE / 2, x + HEX_SIZE, x, x - HEX_SIZE / 2 };
@@ -219,23 +254,64 @@ public class InterfacePlateau extends JFrame {
         return yPoints;
     }
 
-    private Image getImageForUnit(String unit) {
-        if (unit.equals("Infanterie")) {
-            return infanterieImage;
-        } else if (unit.equals("InfanterieLourde")) {
-            return infanterieLourdeImage;
-        } else if (unit.equals("Cavalerie")) {
-            return cavalerieImage;
-        } else if (unit.equals("Mage")) {
-            return mageImage;
-        } else if (unit.equals("Archer")) {
-            return archerImage;
+    /**
+     * Dessine les hexagones et les unités sur le panneau.
+     *
+     * @param g2d L'objet Graphics2D pour dessiner
+     */
+    private void drawHexagons(Graphics2D g2d) {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                int x = col * 3 * HEX_WIDTH / 4 - HEX_WIDTH / 2;
+                int y = row * HEX_HEIGHT;
+
+                if (col % 2 == 1) {
+                    y += HEX_HEIGHT / 2;
+                }
+
+                // Dessiner la surbrillance sur l'hexagone sélectionné
+                if (selectedHexagonX == col && selectedHexagonY == row) {
+                    drawSelectedHexagon(g2d);
+                }
+
+                // Dessiner l'hexagone
+                int[] xPoints = {x + HEX_WIDTH / 4, x + 3 * HEX_WIDTH / 4, x + HEX_WIDTH, x + 3 * HEX_WIDTH / 4, x + HEX_WIDTH / 4, x};
+                int[] yPoints = {y, y, y + HEX_HEIGHT / 2, y + HEX_HEIGHT, y + HEX_HEIGHT, y + HEX_HEIGHT / 2};
+                g2d.setColor(Color.BLACK);
+                //g2d.drawPolygon(xPoints, yPoints, 6);
+
+                // Dessiner l'unité sur l'hexagone
+                if (unitMap[row][col] != null) {
+                    Image unitImage = null;
+                    switch (unitMap[row][col]) {
+                        case "Infanterie":
+                            unitImage = infanterieImage;
+                            break;
+                        case "InfanterieLourde":
+                            unitImage = infanterieLourdeImage;
+                            break;
+                        case "Cavalerie":
+                            unitImage = cavalerieImage;
+                            break;
+                        case "Mage":
+                            unitImage = mageImage;
+                            break;
+                        case "Archer":
+                            unitImage = archerImage;
+                            break;
+                    }
+                    if (unitImage != null) {
+                        g2d.drawImage(unitImage, x + HEX_WIDTH / 4 - 10, y + HEX_HEIGHT / 4 - 37, null);
+                    }
+                }
+            }
         }
-        return null;
     }
 
+    /**
+     * Initialise la carte des unités avec des valeurs par défaut (null).
+     */
     private void initializeUnitMap() {
-        // Initialiser la carte des unités avec des valeurs par défaut
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 unitMap[row][col] = null;

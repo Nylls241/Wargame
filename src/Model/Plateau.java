@@ -7,9 +7,6 @@ public class Plateau {
     private int tourActuel;//Notre identiant de joueur 
     private ArrayList<Joueur> joueurs = new ArrayList<Joueur>();
 
-    public Plateau(){
-
-    }
 
     /**
      * Constructeur de plateau, avec le tableau des cases et la liste de joueurs

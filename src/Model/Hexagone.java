@@ -11,7 +11,7 @@ public class Hexagone {
     private boolean visible;
     private int coordonneeX; //colonnes
     private int coordonneeY; //lignes
-
+    
     /**
      * Constructeur de la classe Hexagone 
      * Initialise un terrain fixe, sans unité avec le fait que la case ne soit pas visible 

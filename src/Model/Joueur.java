@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Joueur{
     private String pseudo;
     private int numero;//Notre identiant de joueur 
-    private int couleur;
+   private int couleur;
     private ArrayList<Unites> unites = new ArrayList<Unites>();
     private Plateau plateau;
     
@@ -17,8 +17,6 @@ public class Joueur{
      * 
      * 
      */
-    public Joueur() {
-    }
 
     /**
      * Constructeur de la classe joueur
@@ -26,9 +24,9 @@ public class Joueur{
      * @param numero indice unique du joueur, permet de diriger les tours d'action de la partie
      * @param couleur couleur à appliquer aux unités du joueur
      */
-    public Joueur(String pseudo, int numero, int couleur) {
-        this.pseudo = pseudo;
-        this.numero = numero;
+    public Joueur() {
+        this.pseudo = "Joueur 1";
+        this.numero = 0;
         this.couleur = couleur;
     }
 
